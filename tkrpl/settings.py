@@ -28,7 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-x!*hzn##xivhhoa(rz*@up%k3b8sjc73vynws^a$9_f^_zjnpw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = not PRODUCTION
+# DEBUG = not PRODUCTION
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -88,8 +89,8 @@ DATABASES = {
     }
 }
 
-# if PRODUCTION:
-    # DATABASES['default'] = dj_database_url.parse(os.getenv('DATABASE_URL'), conn_max_age=600)
+if PRODUCTION:
+    DATABASES['default'] = dj_database_url.parse('sqlite:////data/db.sqlite3', conn_max_age=600)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
