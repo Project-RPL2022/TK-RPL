@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
+
+
+PRODUCTION = os.getenv('DATABASE_URL') is not None
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,6 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-x!*hzn##xivhhoa(rz*@up%k3b8sjc73vynws^a$9_f^_zjnpw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = not PRODUCTION
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -37,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'main',
 ]
 
@@ -48,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'tkrpl.urls'
@@ -81,6 +89,8 @@ DATABASES = {
     }
 }
 
+if PRODUCTION:
+    DATABASES['default'] = dj_database_url.parse('sqlite:////data/db.sqlite3', conn_max_age=600)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -122,3 +132,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = ['https://tkrpl.fly.dev']
+
+CORS_ORIGIN_ALLOW_ALL = True
