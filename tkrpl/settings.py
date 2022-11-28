@@ -28,7 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-x!*hzn##xivhhoa(rz*@up%k3b8sjc73vynws^a$9_f^_zjnpw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = not PRODUCTION
+DEBUG = not PRODUCTION
+# Turn on for deploy debugging
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'tkrpl.urls'
@@ -90,7 +92,7 @@ DATABASES = {
 }
 
 if PRODUCTION:
-    DATABASES['default'] = dj_database_url.parse('sqlite:////data/db.sqlite3', conn_max_age=600)
+    DATABASES['default'] = dj_database_url.parse(os.getenv("DATABASE_URL"), conn_max_age=600)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -122,11 +124,25 @@ USE_I18N = True
 
 USE_TZ = True
 
+# This is the directory for storing `collectstatic` results.
+# This shouldn't be included in your Git repository.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# You can use this directory to store project-wide static files.
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# Make sure the directories exist to prevent errors when doing `collectstatic`.
+for directory in [*STATICFILES_DIRS, STATIC_ROOT]:
+    directory.mkdir(exist_ok=True)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/code/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
