@@ -20,7 +20,8 @@ COPY . /code/
 
 WORKDIR /code
 
-# RUN python manage.py collectstatic --noinput
+# Set static file, comment if error
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+  <h2>Sign up</h2>
+  <form method="post">
+    {% csrf_token %}
+    <p>
+      <label for="username">Username:</label>
+      <input type="text" name="username"></input>
+    </p>
+    <p>
+      <label for="first_name">Name:</label>
+      <input type="text" name="first_name"></input>
+    </p>
+    <p>
+      <label for="password">Password:</label>
+      <input type="password" name="password"></input>
+    </p>
+    <p>
+      <label for="role">Role:</label>
+      <select name="role">
+        <option value="GUEST">Guest</option>
+        <option value="HOTEL_SUPERVISOR">Hotel Supervisor</option>
+        <option value="HOTEL_ADMINISTRATOR">Hotel Administrator</option>
+      </select>
+    </p>
+    <button type="submit">Sign Up</button>
+  </form>
+{% endblock %}
