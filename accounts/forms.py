@@ -10,11 +10,3 @@ class SignupForm(forms.ModelForm):
             "first_name",
             "password",
             ]
-
-class HotelUserForm(forms.ModelForm):
-    class Meta:
-        model = HotelUser
-        fields = [
-            "user",
-            "role",
-        ]

@@ -16,20 +16,19 @@ def signup(request):
         if is_authenticated(request):
             return redirect(reverse_lazy("login"))
         return render(request, 'registration/signup.html')
-
-    userdata = request.POST
     
     # Save user
     try:
-        user = User.objects.create_user(userdata['username'],"",userdata['password'])
+        user = User.objects.get(username=request.POST['username'])
+    except:
+        user = User.objects.create_user(request.POST['username'],"",request.POST['password'])
         user.save()
-    except:
-        user = User.objects.get(username=userdata['username'])
-    
+
     try:
-        hoteluser = HotelUser(user=user,role="GUEST")
-        hoteluser.save()
-    except:
         hoteluser = HotelUser.objects.get(user=user)
-    
+        return redirect(reverse_lazy("signup"))
+    except:
+        hoteluser = HotelUser(user=user,role=request.POST['role'])
+        hoteluser.save()
+
     return redirect(reverse_lazy("login"))
