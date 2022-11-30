@@ -17,9 +17,11 @@
         <td>{{ room.kapasitas_max }}</td>
         <td>{{ room.tipe }}</td>
         <td>{{ room.status }}</td>
-        <td>{{ room.hotel }}</td>
-
+        <td>{{ room.hotel.name }}</td>
     </tr>
     {% endfor %}
 </table>
+<form action="create/">
+    <button>Create New</button>
+</form>
 {% endblock %}

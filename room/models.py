@@ -15,6 +15,8 @@ PAYMENT_STATUS = (
 
 
 class Room(models.Model):
+    def __str__(self):
+        return self.name
     name = models.CharField(max_length=255)
     kapasitas_max = models.IntegerField(default=1)
     tipe = models.CharField(max_length=255)
