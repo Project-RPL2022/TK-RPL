@@ -6,22 +6,7 @@
 <h2>Create Room</h2>
   <form method="post">
     {% csrf_token %}
-    <p>
-      <label for="name">Name:</label>
-      {{ form.name }}
-    </p>
-    <p>
-      <label for="kapasitas_max">Max Capacity:</label>
-      {{ form.kapasitas_max }}
-    </p>
-    <p>
-      <label for="tipe">Type:</label>
-      {{ form.tipe }}
-    </p>
-    <p>
-      <label for="hotel">Hotel:</label>
-      {{ form.hotel }}
-    </p>
+    {{ form.as_p }}
     <button type="submit">Submit</button>
   </form>
 {% endblock %}
