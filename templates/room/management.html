@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Room Management{% endblock %}
+
+{% block content %}
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Max Capacity</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Hotel</th>
+    </tr>
+    {% for room in rooms %}
+    <tr>
+        <td>{{ room.name }}</td>
+        <td>{{ room.kapasitas_max }}</td>
+        <td>{{ room.tipe }}</td>
+        <td>{{ room.status }}</td>
+        <td>{{ room.hotel }}</td>
+
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
