@@ -7,26 +7,7 @@
   <form method="post">
     {% csrf_token %}
     <input type="hidden" name='id' value='{{ id }}'>
-    <p>
-      <label for="name">Name:</label>
-      {{ form.name }}
-    </p>
-    <p>
-      <label for="kapasitas_max">Max Capacity:</label>
-      {{ form.kapasitas_max }}
-    </p>
-    <p>
-      <label for="tipe">Type:</label>
-      {{ form.tipe }}
-    </p>
-    <p>
-      <label for="status">Status:</label>
-      {{ form.status }}
-    </p>
-    <p>
-      <label for="hotel">Hotel:</label>
-      {{ form.hotel }}
-    </p>
+    {{ form.as_p }}
     <button type="submit">Submit</button>
   </form>
 {% endblock %}
