@@ -12,13 +12,20 @@
         <th>Hotel</th>
     </tr>
     {% for room in rooms %}
-    <tr>
-        <td>{{ room.name }}</td>
-        <td>{{ room.kapasitas_max }}</td>
-        <td>{{ room.tipe }}</td>
-        <td>{{ room.status }}</td>
-        <td>{{ room.hotel.name }}</td>
-    </tr>
+    <form action="edit/", method="post">
+        {% csrf_token %}
+        <tr>
+            <td>{{ room.name }}</td>
+            <td>{{ room.kapasitas_max }}</td>
+            <td>{{ room.tipe }}</td>
+            <td>{{ room.status }}</td>
+            <td>{{ room.hotel.name }}</td>
+            <td>
+                <input type="hidden" name="room" value="{{ room.id }}">
+                <button>Edit</button>
+            </td>
+        </tr>
+    </form>
     {% endfor %}
 </table>
 <form action="create/">
