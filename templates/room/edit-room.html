@@ -3,34 +3,11 @@
 {% block title %}Create Room{% endblock %}
 
 {% block content %}
-<h2>Create Room</h2>
+<h2>Edit Room</h2>
   <form method="post">
     {% csrf_token %}
-    <p>
-      <label for="name">Name:</label>
-      <input type="text" name="name"></input>
-    </p>
-    <p>
-      <label for="kapasitas_max">Max Capacity:</label>
-      <input type="text" name="kapasitas_max"></input>
-    </p>
-    <p>
-      <label for="type">Type:</label>
-      <input type="text" name="type"></input>
-    </p>
-    <p>
-      <label for="status">Status:</label>
-      <select name="status">
-        <option value="AVAILABLE">Available</option>
-        <option value="OCCUPIED">Occupied</option>
-      </select>
-    </p>
-    <p>
-      <label for="hotel">Hotel:</label>
-      <select name="hotel">
-        <option value="h1">h1</option>
-      </select>
-    </p>
+    <input type="hidden" name='id' value='{{ id }}'>
+    {{ form.as_p }}
     <button type="submit">Submit</button>
   </form>
 {% endblock %}

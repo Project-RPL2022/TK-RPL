@@ -16,5 +16,36 @@ def manage_rooms(request):
 
 def create_room(request):
     if request.method != "POST":
-        form = RoomForm()
+        form = CreateRoomForm()
         return render(request, 'room/create-room.html', {'form' : form})
+    
+    form = CreateRoomForm(request.POST)
+    if form.is_valid:
+        form.save()
+    return redirect(reverse_lazy("room-management"))
+
+def edit_room(request):
+    if request.method != "POST":
+        form = CreateRoomForm()
+        return render(request, 'room/create-room.html', {'form' : form})
+    
+    # Display edit room
+    try:
+        id=request.POST['room']
+        room = Room.objects.get(id=id)
+        form = EditRoomForm(instance=room)
+        return render(request, 'room/edit-room.html', {'form':form, 'id':id})
+    except:
+        pass
+
+    # Save edit
+    try:
+        room = Room.objects.get(id=request.POST['id'])
+        form = EditRoomForm(request.POST, instance=room)
+        if form.is_valid:
+            form.save()
+        return redirect(reverse_lazy("room-management"))
+    except:
+        pass
+    
+    return redirect(reverse_lazy("room-management"))
