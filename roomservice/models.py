@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from hotel.models import Hotel
 from accounts.models import HotelUser
@@ -32,6 +34,8 @@ class RoomService(models.Model):
 
 class RoomServiceOrder(models.Model):
     order_date = models.DateTimeField()
+    time_served = models.DateTimeField(default=datetime.now)
+    notes = models.CharField(max_length=255, default="-")
     status = models.CharField(
         max_length=30, choices=ROOM_SERVICE_ORDER_STATUS, default="WAITING")
     room_service = models.ForeignKey(
