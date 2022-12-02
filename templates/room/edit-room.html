@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Room{% endblock %}
+
+{% block content %}
+<h2>Edit Room</h2>
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name='id' value='{{ id }}'>
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}

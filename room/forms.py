@@ -1,17 +1,13 @@
 from django import forms
-from hotel.models import Hotel
+from django.forms import ModelForm
+from .models import Room
 
-class CreateRoomForm(forms.Form):
-    name=forms.CharField(
-        label='Nama Kamar',
-        required=True,
-        max_length=225
-    )
-    kapasitas_max=forms.IntegerField(
-        label="Kapasitas Kamar",
-        required=True
-    )
-    tipe=forms.CharField(
-        label="Tipe",
-        required=True
-    )
+class CreateRoomForm(ModelForm):
+    class Meta:
+        model = Room
+        exclude = ('status',)
+
+class EditRoomForm(ModelForm):
+    class Meta:
+        model = Room
+        fields = '__all__'
