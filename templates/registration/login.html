@@ -3,10 +3,19 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<h2>Log In</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Log In</button>
-</form>
+  <div class="translate-y-1/2 mx-auto w-96 border-2 shadow-lg text-center rounded-xl">
+    <h2 class="p-3 bg-blue-500 font-bold rounded-t-xl">Log In</h2>
+    <form method="post" class="p-4 text-center bg-blue-50">
+      {% csrf_token %}
+      <p class="p-3">
+        <label for="username">Username:</label>
+        {{ form.username }}
+      </p>
+      <p class="p-3">
+        <label for="password">Password:</label>
+        {{ form.password }}
+      </p>
+      <button type="submit" class="my-2 mx-4 p-2 bg-blue-400 hover:bg-blue-500 rounded">Log In</button>
+    </form>
+  </div>
 {% endblock %}
