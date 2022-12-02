@@ -16,11 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
-
+import hotel.urls as hotel
+import room.urls as room
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('main.urls')), # new
+    path('hotel/', include(hotel)), #new
+    path('room/', include(room)), #new
 ]

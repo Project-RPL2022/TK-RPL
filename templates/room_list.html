@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hotel</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>No</th>  
+        <th>Nama Kamar</th>
+        <th>Tipe</th>
+        <th>Kapasitas</th>
+        <th>Asal Hotel</th>
+      <!-- TODO loop from Friend model -->
+      {% for room in rooms %}
+      </tr>
+        <td>{{  forloop.counter }}</td>
+        <td>{{  room.name }}</td>
+        <td>{{  room.tipe }}</td>
+        <td>{{  room.kapasitas_max }}</td>
+        <td>{{  room.hotel.name }}</td>
+      </tr>
+      {% endfor %}
+    </tr>
+    </table>
+  </body>
+</html>
+{% endblock content %}
