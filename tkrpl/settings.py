@@ -50,11 +50,13 @@ INSTALLED_APPS = [
     'corsheaders',
     'crispy_forms',
     'widget_tweaks',
+    'rest_framework',
     'main',
     'accounts',
     'hotel',
     'room',
     'roomservice',
+    'feedback'
 ]
 
 MIDDLEWARE = [
@@ -89,7 +91,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tkrpl.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
