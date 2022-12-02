@@ -13,9 +13,9 @@ def signup(request):
         next="/"
 
     if request.method != "POST":
-        if is_authenticated(request):
-            return redirect(reverse_lazy("login"))
-        return render(request, 'registration/signup.html')
+        if request.user.is_anonymous:
+            return render(request, 'registration/signup.html')
+        return redirect(reverse_lazy("home"))
     
     # Save user
     try:
