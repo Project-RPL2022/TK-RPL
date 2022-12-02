@@ -23,3 +23,10 @@ class FeedbackView(APIView):
             )
 
         return Response({'msg': 'success'})
+
+# pages
+
+
+class FeedbackPage(APIView):
+    def get(self, request, format=None):
+        return render(request, 'feedback/index.html')
