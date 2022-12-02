@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'hotel',
     'room',
     'roomservice',
+    'feedback'
 ]
 
 MIDDLEWARE = [
