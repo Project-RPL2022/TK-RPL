@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'crispy_forms',
+    'widget_tweaks',
     'main',
     'accounts',
     'hotel',

@@ -5,35 +5,33 @@
 {% block content %}
   <div class="translate-y-1/2 mx-auto w-96 border-2 shadow-lg text-center rounded-xl bg-blue-50">
     <h2 class="p-3 bg-blue-500 font-bold rounded-t-xl">Sign Up</h2>
-    <form method="post" class="p-4 text-center">
+    <form method="post" class="p-1 text-center">
       {% csrf_token %}
-      <div>
-        <div class="text-right inline-block">
-          <p class="p-3">
-            <label for="username">Username:</label>
-            <input type="text" name="username" required class="border-black border rounded" value={{ username }}></input>
-          </p>
-          <p class="p-3">
-            <label for="first_name">Name:</label>
-            <input type="text" name="first_name" required class="border-black border rounded" value={{ first_name }}></input>
-          </p>
-          <p class="p-3">
-            <label for="password">Password:</label>
-            <input type="password" name="password" required class="border-black border rounded" value={{ password }}></input>
-          </p>
-          <p class="p-3">
-            <label for="role">Role:</label>
-            <select name="role" class="border-black border rounded">
-              {% for key, val in roles.items %}
-              <option value={{ key }} {% if key == prevrole %} selected {% endif %}>{{ val }}</option>
-              {% endfor %}
-            </select>
-          </p>
-        </div>
+      <div class="text-right inline-block">
+        <p class="p-3">
+          <label for="username">Username:</label>
+          <input type="text" name="username" required class="border-black border rounded" value={{ username }}></input>
+        </p>
+        <p class="p-3">
+          <label for="first_name">Name:</label>
+          <input type="text" name="first_name" required class="border-black border rounded" value={{ first_name }}></input>
+        </p>
+        <p class="p-3">
+          <label for="password">Password:</label>
+          <input type="password" name="password" required class="border-black border rounded" value={{ password }}></input>
+        </p>
+        <p class="p-3">
+          <label for="role">Role:</label>
+          <select name="role" class="border-black border rounded">
+            {% for key, val in roles.items %}
+            <option value={{ key }} {% if key == prevrole %} selected {% endif %}>{{ val }}</option>
+            {% endfor %}
+          </select>
+        </p>
       </div>
       <p class="text-red-600">{{ message }}</p>
-      <button type="submit" class="my-2 p-2 bg-blue-400 rounded">Sign Up</button>
+      <button type="submit" class="p-2 bg-blue-400 rounded">Sign Up</button>
     </form>
-    <p class="mb-4">Already have an account? <a href={% url "login" %} class="underline text-blue-600">Login</a></p>
+    <p class="pb-4">Already have an account? <a href={% url "login" %} class="underline text-blue-600">Login</a></p>
   </div>
 {% endblock %}
