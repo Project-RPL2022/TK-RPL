@@ -19,6 +19,7 @@ class Room(models.Model):
         return self.name
     name = models.CharField(max_length=255)
     kapasitas_max = models.IntegerField(default=1)
+    price=models.FloatField(default=500)
     tipe = models.CharField(max_length=255)
     status = models.CharField(
         max_length=30, choices=ROOM_STATUS, default="AVAILABLE")

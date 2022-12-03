@@ -1,6 +1,5 @@
-from asyncio.windows_events import NULL
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from .forms import HotelForm
 from .models import Hotel
 from room.models import Room,RoomOrder,RoomPayment
@@ -25,12 +24,7 @@ def hotel_list(request):
     return render(request,'hotel_list.html',response)
 #buat menunjukan daftar hotel infografis
 
-def list_kamar(request):
-    return NULL
-#sees all alvailable room
-#redirect to room/hotel_
-
 def checkout():
-    return NULL
+    return ""
 #checkout dari hotel
 
