@@ -25,5 +25,6 @@ urlpatterns = [
     path('room/', include('room.urls')),
     path('roomservice/', include('roomservice.urls')),
     path('', include('feedback.urls')),
+    path('', include('infographic.urls')),
     path('', include('main.urls')),  # new
 ]

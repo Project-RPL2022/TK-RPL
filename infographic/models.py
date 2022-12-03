@@ -1,6 +1,5 @@
 from django.db import models
-from hotel.models import Hotel
-from hotel.models import Facility
+from hotel.models import Hotel, Facility
 from django.dispatch import receiver
 
 # Create your models here.
@@ -8,7 +7,6 @@ class Infographic(models.Model):
     def __str__(self):
         return self.name
     name = models.CharField(max_length=255)
-    facility = models.ForeignKey(Facility, on_delete=models.CASCADE)
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     image = models.ImageField()
 
