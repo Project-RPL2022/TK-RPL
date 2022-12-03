@@ -15,23 +15,20 @@ from io import BytesIO
 # Create your views here.
 
 @csrf_exempt
-def getInfographic(request):
-    isSuccess = None
-    hotel = None
-    facility = None
-    if request.method == 'POST':
-        form = GetInfographicForm(request.POST)
-        if form.is_valid():
-            hotel = request.POST['hotel']
-            isSuccess = 'True'
-        else:
-            isSuccess = 'False'
-    if isSuccess:
-        hotelId = hotel
-        hotelObject = Hotel.objects.get(pk=int(hotelId))
+def getInfographic(request, hotelId):
+    if request.method == 'GET':
+        try:
+            hotelObject = Hotel.objects.get(pk=hotelId)
+        except Hotel.DoesNotExist:
+            hotelObject = None
+    if hotelObject != None:
         facilityObjects = Facility.objects.filter(hotel=hotelObject)
     else:
-        return JsonResponse({"status": isSuccess})
+        return JsonResponse({
+            "success": False,
+            "message": "Hotel with id " + str(hotelId) + " not found!",
+            "infographicUrl": "null"
+            })
 
     try:
         infographic = Infographic.objects.get(hotel = hotelObject)
@@ -45,8 +42,16 @@ def getInfographic(request):
         img_content = ContentFile(blob.getvalue(), 'infographic_'+hotelId+'.png')
         newInfographic = Infographic(name='Infographic ' + hotelObject.name, hotel=hotelObject, image=img_content)
         newInfographic.save()
-        return JsonResponse({"infographicUrl": newInfographic.image.url})
+        return JsonResponse({
+            "success": True,
+            "message": "OK",
+            "infographicUrl": newInfographic.image.url
+            })
     else:
-        return JsonResponse({"infographicUrl": infographic.image.url})
+        return JsonResponse({
+            "success": True,
+            "message": "OK",
+            "infographicUrl": infographic.image.url
+            })
         
     

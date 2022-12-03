@@ -3,5 +3,5 @@ from .views import *
 
 
 urlpatterns = [
-    path("infographic", getInfographic),
+    path("<int:hotelId>", getInfographic),
 ]
