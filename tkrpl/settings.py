@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'roomservice',
     'feedback',
     'infographic',
+    'payment',
 ]
 
 MIDDLEWARE = [
