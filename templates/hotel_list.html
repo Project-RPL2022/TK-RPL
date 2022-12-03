@@ -14,7 +14,7 @@
         <th>Book</th>
       <!-- TODO loop from Friend model -->
       {% for hotel in hotels %}
-      </tr>
+      <tr>
         <td>{{  forloop.counter }}</td>
         <td>{{  hotel.name }}</td>
         <td><a href="/room/book_room{{ hotel.name }}">Book Hotel</a>

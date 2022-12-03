@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,15 +10,23 @@
 <body>
 <form action="" method="POST">
     {% csrf_token %}
-    <h1>Create Transaksi Paket Koin</h1>
+    <h1>Booking Kamar</h1>
+    <p>Order Date</p>
     <br>
-    <label for="nama_kamar">Nama Kamar</label>
-    <p class="nama_kamar" readonly>{{ book_room_form.nama_kamar }}</p>
-    <label for="nama_hotel">Nama Hotel</label>
-    <p class="nama_hotel" readonly>{{ book_room_form.hotel_stay }}</p>
-    <label for="end_date">Ju</label>
-    <p class="end_date">{{ book_room_form.end_date }}</p>
+    {{ form.order_date|attr:"type:date"  }}
     <br>
+    <p>End Date</p>
+    <br>
+    {{ form.end_date|attr:"type:date"  }}
+    </br>
+    <p>Guest</p>
+    <br>
+    {{ form.guest }}
+    </br>
+    <p>Room</p>
+    <br>
+    {{ form.room }}
+    </br>
     <button type="submit" value="Submit">Book</button>
 </form>
 </body>

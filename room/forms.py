@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Room
+from .models import Room,RoomOrder
 
 class CreateRoomForm(ModelForm):
     class Meta:
@@ -12,16 +12,8 @@ class EditRoomForm(ModelForm):
         model = Room
         fields = '__all__'
 
-class BookRoomForm(forms.Form):
-    end_date=forms.DateField(
-        label='Check Out',
-        required=True
-    ),
-    nama_kamar=forms.CharField(
-        label='Nama Kamar',
-        required=True
-    )
-    hotel_stay=forms.CharField(
-        label="Nama Hotel",
-        required=True
-    )
+class BookRoomForm(ModelForm):
+    class Meta:
+        model =RoomOrder
+        fields='__all__'
+        

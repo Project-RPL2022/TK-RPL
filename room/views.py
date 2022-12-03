@@ -18,33 +18,39 @@ def list_room(request,hotel_name):
     return render(request,'room_list.html',response)
 
 def book_room(request,hotel_name,room_name):
-    if is_authenticated(request) != True | get_role(request) != "GUEST" |(get_role(request) == "GUEST" & request.user['guest_status']=='CHECK-IN') :
+    if request.user.is_anonymous | (get_role(request) != "GUEST") :
         return redirect(reverse_lazy("home"))
     else:
+        user=request.user
+        hoteluser = HotelUser.objects.get(user=user)
+        if(hoteluser.guest_status != "CHECK-OUT"):
+            return HttpResponseRedirect('list_room/<str:hotel_name>')
+
+        hotel_stay=Hotel.objects.filter(name=hotel_name)[0]
+        room_stay=Room.objects.filter(hotel=hotel_stay,name=room_name)[0]
         if request.method == 'POST':
             form=BookRoomForm(request.POST)
             if form.is_valid():
-                user=request.user
-                hotel_stay=Hotel.objects.filter(name=hotel_name)[0]
-                room=Room.objects.filter(hotel=hotel_stay,name=room_name)[0]
-                start_date=datetime.today()
-                end_date=request.POST['end_date']
 
-                room_order=RoomOrder(order_date=start_date,end_date=end_date,guest=user,room=room)
-                room_order.save()
+                room_order=form.save()
 
-                room_payment=RoomPayment(price=room.price,room_order=room_order)
+                room_payment=RoomPayment(price=room_stay.price,room_order=room_order)
                 room_payment.save()
 
-                room.status='OCCUPIED'
-                room.save()
+                room_stay.status='OCCUPIED'
+                room_stay.save()
 
-                user.guest_status='CHECK-IN'
-                user.guest_current_stay=hotel_stay
-                user.save()
-                return HttpResponseRedirect('list_room/<str:hotel_name>/<str:room_name>')
+                hoteluser.guest_status='CHECK-IN'
+                hoteluser.guest_current_stay=hotel_stay
+                hoteluser.save()
+                return redirect('/room/list_room/'+hotel_name)
+            
         else:
-            form=BookRoomForm(initial={'nama_kamar':room_name,'hotel_stay':hotel_name})
+            initial_data={
+            'guest':hoteluser,
+            'room':room_stay
+            }
+            form=BookRoomForm(initial=initial_data)
             return render(request,'book_room_form.html',{'form':form})
 
 def manage_rooms(request):
