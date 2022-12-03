@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from tkrpl.auth import *
-from .forms import *
 from .models import *
 
 # Create your views here.
+roles = {'GUEST':'Guest',
+        'HOTEL_SUPERVISOR':'Hotel Supervisor',
+        'HOTEL_ADMINISTRATOR': 'Hotel Administrator'}
 
 def signup(request):
     # Redirect next
@@ -13,22 +15,33 @@ def signup(request):
         next="/"
 
     if request.method != "POST":
-        if is_authenticated(request):
-            return redirect(reverse_lazy("login"))
-        return render(request, 'registration/signup.html')
+        if request.user.is_anonymous:
+            return render(request, 'registration/signup.html', {'roles':roles})
+        return redirect(reverse_lazy("home"))
     
     # Save user
     try:
-        user = User.objects.get(username=request.POST['username'])
+        currentuser = User.objects.get(username=request.POST['username'])
     except:
-        user = User.objects.create_user(request.POST['username'],"",request.POST['password'])
-        user.save()
+        currentuser = User.objects.create_user(
+            username=request.POST['username'],
+            first_name=request.POST['first_name'],
+            email="",
+            password=request.POST['password'])
+        currentuser.save()
 
-    try:
-        hoteluser = HotelUser.objects.get(user=user)
-        return redirect(reverse_lazy("signup"))
-    except:
-        hoteluser = HotelUser(user=user,role=request.POST['role'])
+    if HotelUser.objects.filter(user=currentuser).exists():
+        message = "Username already taken."
+        return render(request, 'registration/signup.html', {
+            "message":message,
+            "username":request.POST['username'],
+            "first_name":request.POST['first_name'],
+            "password":request.POST['password'],
+            "prevrole":request.POST['role'],
+            'roles':roles
+            })
+    else:
+        hoteluser = HotelUser(user=currentuser,role=request.POST['role'])
         hoteluser.save()
-
+    
     return redirect(reverse_lazy("login"))

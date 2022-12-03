@@ -26,6 +26,7 @@ urlpatterns = [
     path('room/', include('room.urls')),
     path('hotel/', include('hotel.urls')),
     path('roomservice/', include('roomservice.urls')),
+    path('infographic/', include('infographic.urls')),
     path('', include('feedback.urls')),
     path('', include('main.urls')),  # new
 ]
