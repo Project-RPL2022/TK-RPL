@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+  <div class="translate-y-1/2 mx-auto w-96 border-2 shadow-lg text-center rounded-xl bg-blue-50">
+    <h2 class="p-3 bg-blue-500 font-bold rounded-t-xl">Log In</h2>
+    <form method="post" class="p-4 text-center">
+      {% csrf_token %}
+      {% for field in form %}
+        <p class="p-3">
+          {{ field.label_tag }}
+          {{ field }}
+        </p>
+      {% endfor %}
+      <button type="submit" class="my-2 mx-4 p-2 bg-blue-400 hover:bg-blue-500 rounded">Log In</button>
+    </form>
+  </div>
+{% endblock %}

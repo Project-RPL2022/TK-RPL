@@ -19,6 +19,8 @@ PRODUCTION = os.getenv('DATABASE_URL') is not None
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+if PRODUCTION:
+    BASE_DIR = Path("/code")
 
 
 # Quick-start development settings - unsuitable for production
@@ -43,9 +45,20 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'livereload',
     'django.contrib.staticfiles',
     'corsheaders',
+    'crispy_forms',
+    'widget_tweaks',
+    'rest_framework',
     'main',
+    'accounts',
+    'hotel',
+    'room',
+    'roomservice',
+    'feedback',
+    'infographic',
+    'payment',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +71,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'tkrpl.urls'
@@ -65,7 +79,7 @@ ROOT_URLCONF = 'tkrpl.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,7 +94,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tkrpl.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -92,7 +105,8 @@ DATABASES = {
 }
 
 if PRODUCTION:
-    DATABASES['default'] = dj_database_url.parse(os.getenv("DATABASE_URL"), conn_max_age=600)
+    DATABASES['default'] = dj_database_url.parse(
+        os.getenv("DATABASE_URL"), conn_max_age=600)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -152,3 +166,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = ['https://tkrpl.fly.dev']
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+
+# File storage
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# AWS S3 configuration
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
+AWS_S3_FILE_OVERWRITE = True
+AWS_QUERYSTRING_AUTH = False
