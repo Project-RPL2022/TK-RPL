@@ -7,7 +7,51 @@ from tkrpl.auth import *
 from main.utils import getHotelUser
 from .models import *
 from .forms import *
+from datetime import datetime
+from django.http import HttpResponseRedirect
+from django.contrib.auth import *
 
+def list_room(request,hotel_name):
+    hotel_choose=Hotel.objects.filter(name=hotel_name)[0]
+    rooms=Room.objects.filter(hotel=hotel_choose, status="AVAILABLE")
+    response={"rooms":rooms}
+    return render(request,'room_list.html',response)
+
+def book_room(request,hotel_name,room_name):
+    if request.user.is_anonymous | (get_role(request) != "GUEST") :
+        return redirect(reverse_lazy("home"))
+    else:
+        user=request.user
+        hoteluser = HotelUser.objects.get(user=user)
+        if(hoteluser.guest_status != "CHECK-OUT"):
+            return HttpResponseRedirect('list_room/<str:hotel_name>')
+
+        hotel_stay=Hotel.objects.filter(name=hotel_name)[0]
+        room_stay=Room.objects.filter(hotel=hotel_stay,name=room_name)[0]
+        if request.method == 'POST':
+            form=BookRoomForm(request.POST)
+            if form.is_valid():
+
+                room_order=form.save()
+
+                room_payment=RoomPayment(price=room_stay.price,room_order=room_order)
+                room_payment.save()
+
+                room_stay.status='OCCUPIED'
+                room_stay.save()
+
+                hoteluser.guest_status='CHECK-IN'
+                hoteluser.guest_current_stay=hotel_stay
+                hoteluser.save()
+                return redirect('/room/list_room/'+hotel_name)
+            
+        else:
+            initial_data={
+            'guest':hoteluser,
+            'room':room_stay
+            }
+            form=BookRoomForm(initial=initial_data)
+            return render(request,'book_room_form.html',{'form':form})
 
 def manage_rooms(request):
     if request.method != "POST":
