@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Room</title>
+</head>
+<body>
+<form action="" method="POST">
+    {% csrf_token %}
+    <h1>Create Room</h1>
+    <br>
+    <label for="name">Nama Kamar</label>
+    <p class="name">{{ create_room_form.name }}</p>
+    <label for="kapasitas_max">Kapasitas Maximum</label>
+    <p class="kapasitas_max">{{ create_room_form.kapasitas_max }}</p>
+    <label for="tipe">Tipe</label>
+    <p class="tipe">{{ create_room_form.tipe}}</p>
+    <br>
+    <button type="submit" value="Submit">Create</button>
+</form>
+</body>
+</html>
+{% endblock content %}

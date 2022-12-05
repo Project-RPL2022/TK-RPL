@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Paket Koin</title>
+</head>
+<body>
+<form action="" method="POST">
+    {% csrf_token %}
+    <h1>Booking Kamar</h1>
+    <p>Order Date</p>
+    <br>
+    {{ form.order_date|attr:"type:date"  }}
+    <br>
+    <p>End Date</p>
+    <br>
+    {{ form.end_date|attr:"type:date"  }}
+    </br>
+    <p>Guest</p>
+    <br>
+    {{ form.guest }}
+    </br>
+    <p>Room</p>
+    <br>
+    {{ form.room }}
+    </br>
+    <button type="submit" value="Submit">Book</button>
+</form>
+</body>
+</html>
+{% endblock content %}
