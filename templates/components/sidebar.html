@@ -1,0 +1,25 @@
+<div class="min-h-screen h-full bg-red-500 overflow-y-hidden p-5 flex flex-col gap-x-2 gap-y-6">
+  <p>Gotel</p>
+  <!-- https://fonts.google.com/icons?icon.query=account -->
+  <a href="">
+    <span class="material-symbols-outlined">home</span>
+  </a>
+  {% if user.is_authenticated %}
+    <a href="">
+      <span class="material-symbols-outlined">bed</span>
+    </a>
+    <a href="">
+      <span class="material-symbols-outlined">room_service</span>
+    </a>
+    <a href="">
+      <span class="material-symbols-outlined">contact_support</span>
+    </a>
+    <a href="">
+      <span class="material-symbols-outlined">manage_accounts</span>
+    </a>
+  {% else %}
+    <a href="">
+      <span class="material-symbols-outlined">account_circle</span>
+    </a>
+  {% endif %}
+</div>
