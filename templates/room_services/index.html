@@ -1,9 +1,53 @@
 {% extends 'base.html' %} 
 
-{% block title %}Create Room{% endblock %} 
+{% block title %}Room Services{% endblock %} 
 
-{%blockcontent %} 
-<div>
+{% block content %} 
+<div class="p-5">
+  <p class="text-lg font-semibold">Room Services <span id="hotel-name"></span></p>
+  <div id="services-wrapper" class="mt-5 flex flex-wrap gap-x-5 gap-y-4"></div>
 </div>
+<script>
+  $( document ).ready(function() {
+    const serviceCard = (data) => {
+      return `
+        <a ${data.status == "AVAILABLE" && `href="${data.id}"`}>
+          <div class="flex flex-col gap-2 relative ${data.status != "AVAILABLE" && "grayscale"}">
+            <img
+              class="w-48 h-48 object-cover rounded-lg" 
+              src="${data.img_url}" alt="Service Img" />
+            <div class="absolute left-0 top-0 text-white bg-red-300 rounded-tl-lg p-1 text-xs">${data.type}</div>
+            <div class="flex flex-col">
+              <p class="font-bold">${data.name}</p>
+              <p class="font-bold text-amber-500">Rp ${new Intl.NumberFormat('en-DE').format(data.price)}</p>
+            </div>
+          </div>
+        </a>
+      `
+    }
+
+    const renderServices = ({data, additionalData}) => {
+      $("#hotel-name").append(additionalData.hotel_name);
+      for (i=0; i<data.length; i++) {
+        $("#services-wrapper").append(serviceCard(data[i]));
+      }
+    }
+
+    $.ajax({
+      url: "/api/roomservice",
+      type: "GET",
+      success: (data, status) => {
+        if (status == "success") {
+          renderServices(data);
+        } else {
+          console.log("error");
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  });
+</script>
 
 {% endblock %}

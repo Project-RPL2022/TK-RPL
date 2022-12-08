@@ -7,7 +7,8 @@ class RoomServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RoomService
-        fields = ['id', 'type', 'status', 'hotel_name']
+        fields = ['id', 'type', 'name', 'img_url',
+                  'status', 'price', 'hotel_name']
 
 
 class RoomServiceDetailSerializer(serializers.ModelSerializer):

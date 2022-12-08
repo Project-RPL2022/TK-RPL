@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 
 from django.http import Http404
+from django.shortcuts import render
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
@@ -9,6 +10,7 @@ from rest_framework.views import APIView
 
 from django.contrib.auth.models import User
 from accounts.models import HotelUser
+from hotel.models import Hotel
 from main.utils import getHotelUser
 
 from .models import RoomService, RoomServiceOrder
@@ -45,9 +47,19 @@ class RoomServiceView(APIView):
                 {"error_message": "You don't have permission to access"})
 
         room_services = RoomService.objects.filter(
-            hotel=hotel_user.guest_current_stay)
+            hotel=hotel_user.guest_current_stay).order_by("status", "type")
+
         serializer = RoomServiceSerializer(room_services, many=True)
-        return Response({'data': serializer.data})
+
+        hotel = hotel_user.guest_current_stay
+        additionalData = {}
+        if hotel != None:
+            additionalData = {'hotel_name': hotel.name}
+        else:
+            raise PermissionDenied(
+                {"error_message": "You don't have permission to access"})
+
+        return Response({'data': serializer.data, 'additionalData': additionalData})
 
 
 class RoomServiceOrderView(APIView):
@@ -84,3 +96,22 @@ class RoomServiceOrderView(APIView):
         order.save()
         serializer = RoomServiceOrderSerializer(order)
         return Response({'data': serializer.data})
+
+# pages
+
+
+class RoomServicePage(APIView):
+    def get(self, request, format=None):
+        # check user
+        if not request.user.is_authenticated:
+            raise PermissionDenied(
+                {"error_message": "You don't have permission to access"})
+
+        user = User.objects.get(username=request.user)
+        hotel_user = HotelUser.objects.get(user=user)
+
+        # check stay-in
+        if hotel_user.guest_status != 'CHECK-IN':
+            return render(request, 'room_services/redirect.html')
+
+        return render(request, 'room_services/index.html')

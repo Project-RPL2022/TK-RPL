@@ -25,6 +25,8 @@ PAYMENT_STATUS = (
 
 class RoomService(models.Model):
     type = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, default="")
+    img_url = models.CharField(max_length=255, default="")
     status = models.CharField(
         max_length=30, choices=ROOM_SERVICE_STATUS, default="AVAILABLE")
     price = models.FloatField(default=0)
