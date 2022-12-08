@@ -27,7 +27,14 @@ class RoomServiceDetailView(APIView):
     def get(self, request, pk, format=None):
         room_service = self.get_object(pk)
         serializer = RoomServiceDetailSerializer(room_service)
-        return Response(serializer.data)
+        return Response(
+            {
+                'data': serializer.data,
+                'additionalData': {
+                    'hotel_name': room_service.hotel.name
+                }
+            }
+        )
 
 
 class RoomServiceView(APIView):
@@ -115,3 +122,20 @@ class RoomServicePage(APIView):
             return render(request, 'room_services/redirect.html')
 
         return render(request, 'room_services/index.html')
+
+
+class RoomServiceDetailPage(APIView):
+    def get(self, request, pk, format=None):
+        # check user
+        if not request.user.is_authenticated:
+            raise PermissionDenied(
+                {"error_message": "You don't have permission to access"})
+
+        user = User.objects.get(username=request.user)
+        hotel_user = HotelUser.objects.get(user=user)
+
+        # check stay-in
+        if hotel_user.guest_status != 'CHECK-IN':
+            return render(request, 'room_services/redirect.html')
+
+        return render(request, 'room_services/detail/index.html')

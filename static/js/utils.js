@@ -13,3 +13,7 @@ function getCookie(name) {
   }
   return cookieValue;
 }
+
+function getPrice(price) {
+  return new Intl.NumberFormat("en-DE").format(price);
+}

@@ -19,7 +19,7 @@
             <div class="absolute left-0 top-0 text-white bg-red-300 rounded-tl-lg p-1 text-xs">${data.type}</div>
             <div class="flex flex-col">
               <p class="font-bold">${data.name}</p>
-              <p class="font-bold text-amber-500">Rp ${new Intl.NumberFormat('en-DE').format(data.price)}</p>
+              <p class="font-bold text-amber-500">Rp ${getPrice(data.price)}</p>
             </div>
           </div>
         </a>

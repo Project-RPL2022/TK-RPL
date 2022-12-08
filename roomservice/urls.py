@@ -9,4 +9,6 @@ urlpatterns = [
          name="room_service_order"),
     # pages
     path("roomservice/", RoomServicePage.as_view(), name="room_service_page"),
+    path('roomservice/<int:pk>', RoomServiceDetailPage.as_view(),
+         name="room_service_detail_page"),
 ]

@@ -1,0 +1,87 @@
+{% extends 'base.html' %} 
+
+{% block title %}Room Services{% endblock %} 
+
+{% block content %}
+
+<div class="p-5 bg-gray-100 w-full">
+  <div class="bg-white p-5 rounded-lg">
+    <p id="hotel_name" class="text-gray-700 text-xl"></p>
+    <div id="type" class="font-bold px-2 bg-red-300 rounded-lg w-fit mt-2"></div>
+    <p id="name" class="font-semibold mt-4"></p>
+    <div class="flex">
+      <img id="img" class="w-3/4 h-auto rounded-lg" src=""/>
+    </div>
+    <p class="font-bold text-amber-500 mt-5" id="price"></p>
+    <textarea id="notes" name="notes" class="border-solid border-2 border-gray-100 mt-2" rows="4" cols="50" placeholder="Notes (spicy, etc)..."></textarea>
+    <div class="w-3/4 mt-3">
+      <button id="order-button" class="w-fit bg-blue-500 py-1 px-4 rounded-lg text-white">
+        Order
+      </button>
+    </div>
+  </div>
+</div>
+<script>
+  $( document ).ready(function() {
+    const slug = location.pathname.split('/').slice(1)[1];
+
+    const order = () => {
+      const csrf = getCookie("csrftoken");
+      const notes = document.getElementById("notes").value;
+      const room_service_id = slug;
+
+      $.ajax({
+        url: "/api/roomservice/order",
+        type: "POST",
+        dataType: "json",
+        data: {
+          notes: notes,
+          room_service_id: room_service_id,
+          csrfmiddlewaretoken: csrf,
+        },
+        success: (data, status) => {
+          console.log("success: " + data);
+          if (status == "success") {
+            alert("success");
+            window.location.replace("/roomservice");
+          } else {
+            alert("failed");
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+    }
+
+    const renderData = ({data, additionalData}) => {
+      $("#hotel_name").text(additionalData['hotel_name']);
+      $("#type").text(data['type']);
+      $("#name").text(data['name']);
+      $("#img").attr("src", data['img_url']);
+      $("#price").text(`Rp ${getPrice(data['price'])}`);
+
+      $("#order-button").click(() => {
+        order();
+      })
+    }
+
+    $.ajax({
+      url: `/api/roomservice/${slug}`,
+      type: "GET",
+      success: (data, status) => {
+        if (status == "success") {
+          console.log(data);
+          renderData(data);
+        } else {
+          console.log("error");
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  });
+</script>
+
+{% endblock %}
