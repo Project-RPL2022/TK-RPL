@@ -3,16 +3,36 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
-  <div class="mx-auto my-auto text-center">
-    <p>Hi {{ user.username }}! You are logged in with {{ role }} role.</p>
-    <p><a href="{% url 'logout' %}" class="underline text-blue-500 hover:text-blue-800">Log Out</a></p>
+<style>
+  .wrapper * {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+  .inline-flex * {
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
+  }
+  img {
+    max-height: 100%;
+    max-width: 100%;
+  }
+</style>
+<div class="wrapper mx-auto w-fit py-16 overflow-auto max-h-full max-w-full">
+  <h1 class="text-center text-4xl font-semibold">Gotel: Reserve your stay anywhere, anytime</h1>
+  <img class="mx-auto" src="https://cdn0-production-images-kly.akamaized.net/yQtPX6hxpKjroA6QQBVowlZ7Hkk=/1280x720/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3386715/original/094552600_1614241094-Double_Tree_Jakarta.jpg"
+  alt="hotel_scenery">
+  <p class="text-xl font-medium">Plan your next stay with the Gotel app! Find great hotel deals and book in just a few minutes.
+    We provide you with the best rooms, services, foods, location, whatever you name it!
+    You can also check out various hotel infographics within the app.</p>
+  <div class="hover:scale-105 ease-out duration-300 inline-flex bg-neutral-100">
+    <img class="mx-auto" src="https://outsidetheboxmom.com/wp-content/uploads/2022/07/Useful-Tips-To-Making-Cocktails-While-On-A-Picnic-2.jpg" alt="classy_drinking">
+    <h1 class="flex items-center text-center text-2xl font-serif font-thin italic">Enjoy your classy dinner with friends and families</h1>
   </div>
-{% else %}
-  <div class="mx-auto my-auto text-center">
-    <p>You are not logged in.</p>
-    <a href="{% url 'login' %}" class="underline text-blue-500 hover:text-blue-800">Log In</a>
-    <a href="{% url 'signup' %}" class="underline text-blue-500 hover:text-blue-800">Sign up</a>
+  <div class="hover:scale-105 ease-out duration-300 inline-flex">
+    <h1 class="flex items-center text-center text-2xl font-serif font-thin italic">Get yourself wet'n'sweaty in the pool</h1>
+    <img class="mx-auto w-2/3" src="https://images.rosewoodhotels.com/is/image/rwhg/rosewoodmiramarbeach-cabanapool" alt="pool">
   </div>
-{% endif %}
+</div>
 {% endblock %}
