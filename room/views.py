@@ -56,19 +56,22 @@ def book_room(request,hotel_name,room_name):
 
 @login_required
 def manage_rooms(request):
+    if get_role(request) != "HOTEL_SUPERVISOR":
+        return redirect(reverse_lazy("home"))
     if request.method != "POST":
-        if get_role(request) != "HOTEL_SUPERVISOR":
-            return redirect(reverse_lazy("home"))
-        rooms = {
-            "rooms": Room.objects.all()
+        context = {
+            "rooms": Room.objects.all(),
+            "role": get_role(request)
         }
-        return render(request, 'room/management.html', rooms)
+        return render(request, 'room/management.html', context)
 
 @login_required
 def create_room(request):
+    if get_role(request) != "HOTEL_SUPERVISOR":
+        return redirect(reverse_lazy("home"))
     if request.method != "POST":
         form = CreateRoomForm()
-        return render(request, 'room/create-room.html', {'form': form})
+        return render(request, 'room/create-room.html', {'form': form, "role": get_role(request)})
 
     form = CreateRoomForm(request.POST)
     if form.is_valid:
@@ -77,16 +80,18 @@ def create_room(request):
 
 @login_required
 def edit_room(request):
+    if get_role(request) != "HOTEL_SUPERVISOR":
+        return redirect(reverse_lazy("home"))
     if request.method != "POST":
         form = CreateRoomForm()
-        return render(request, 'room/create-room.html', {'form': form})
+        return render(request, 'room/create-room.html', {'form': form, "role": get_role(request)})
 
     # Display edit room
     try:
         id = request.POST['room']
         room = Room.objects.get(id=id)
         form = EditRoomForm(instance=room)
-        return render(request, 'room/edit-room.html', {'form': form, 'id': id})
+        return render(request, 'room/edit-room.html', {'form': form, 'id': id, "role": get_role(request)})
     except:
         pass
 
@@ -101,7 +106,6 @@ def edit_room(request):
         pass
 
     return redirect(reverse_lazy("room-management"))
-
 
 class CheckoutView(APIView):
     def patch(self, request, format=None):
