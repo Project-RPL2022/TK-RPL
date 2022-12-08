@@ -10,6 +10,7 @@ from .forms import *
 from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.contrib.auth import *
+from django.contrib.auth.decorators import login_required
 
 def list_room(request,hotel_name):
     hotel_choose=Hotel.objects.filter(name=hotel_name)[0]
@@ -53,6 +54,7 @@ def book_room(request,hotel_name,room_name):
             form=BookRoomForm(initial=initial_data)
             return render(request,'book_room_form.html',{'form':form})
 
+@login_required
 def manage_rooms(request):
     if request.method != "POST":
         if get_role(request) != "HOTEL_SUPERVISOR":
@@ -62,7 +64,7 @@ def manage_rooms(request):
         }
         return render(request, 'room/management.html', rooms)
 
-
+@login_required
 def create_room(request):
     if request.method != "POST":
         form = CreateRoomForm()
@@ -73,7 +75,7 @@ def create_room(request):
         form.save()
     return redirect(reverse_lazy("room-management"))
 
-
+@login_required
 def edit_room(request):
     if request.method != "POST":
         form = CreateRoomForm()

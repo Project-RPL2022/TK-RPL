@@ -4,40 +4,42 @@
 {% block title %}Room Management{% endblock %}
 
 {% block content %}
-    <h2 class="my-3 font-bold text-xl text-center">Room Management</h2>
-    <div class="my-3 mx-12 overflow-x-auto relative shadow-md sm:rounded-lg">
-        <table class="w-full text-center border border-black">
-            <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th class="py-3 px-1 border border-black">Name</th>
-                    <th class="py-3 px-1 border border-black">Max Capacity</th>
-                    <th class="py-3 px-1 border border-black">Type</th>
-                    <th class="py-3 px-1 border border-black">Status</th>
-                    <th class="py-3 px-1 border border-black">Hotel</th>
-                    <th class="py-3 px-1 border border-black">Price</th>
-                    <th class="py-3 px-1 border border-black"></th>
-                </tr>
-            </thead>
-            {% for room in rooms %}
-                <form action="edit/", method="post">
-                    {% csrf_token %}
+    <div class="w-screen px-10 py-10">
+        <h2 class="mx-auto my-3 font-bold text-xl text-center">Room Management</h2>
+        <div class="my-3 mx-12 overflow-x-auto relative shadow-md sm:rounded-lg">
+            <table class="w-full text-center border border-black">
+                <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <td class="py-1 border-x border-black">{{ room.name }}</td>
-                        <td class="py-1 border-x border-black">{{ room.kapasitas_max }}</td>
-                        <td class="py-1 border-x border-black">{{ room.tipe }}</td>
-                        <td class="py-1 border-x border-black">{{ room.status }}</td>
-                        <td class="py-1 border-x border-black">{{ room.hotel }}</td>
-                        <td class="py-1 border-x border-black">{{ room.price }}</td>
-                        <td>
-                            <input type="hidden" name="room" value="{{ room.id }}">
-                            <button class="text-blue-500 hover:text-blue-800 underline">Edit</button>
-                        </td>
+                        <th class="py-3 px-1 border border-black">Name</th>
+                        <th class="py-3 px-1 border border-black">Max Capacity</th>
+                        <th class="py-3 px-1 border border-black">Type</th>
+                        <th class="py-3 px-1 border border-black">Status</th>
+                        <th class="py-3 px-1 border border-black">Hotel</th>
+                        <th class="py-3 px-1 border border-black">Price</th>
+                        <th class="py-3 px-1 border border-black">Action</th>
                     </tr>
-                </form>
-            {% endfor %}
-        </table>
+                </thead>
+                {% for room in rooms %}
+                    <form action="edit/", method="post">
+                        {% csrf_token %}
+                        <tr>
+                            <td class="py-1 border-x border-black">{{ room.name }}</td>
+                            <td class="py-1 border-x border-black">{{ room.kapasitas_max }}</td>
+                            <td class="py-1 border-x border-black">{{ room.tipe }}</td>
+                            <td class="py-1 border-x border-black">{{ room.status }}</td>
+                            <td class="py-1 border-x border-black">{{ room.hotel }}</td>
+                            <td class="py-1 border-x border-black">{{ room.price }}</td>
+                            <td>
+                                <input type="hidden" name="room" value="{{ room.id }}">
+                                <button class="text-blue-500 hover:text-blue-800 underline">Edit</button>
+                            </td>
+                        </tr>
+                    </form>
+                {% endfor %}
+            </table>
+        </div>
+        <form action="create/" class="text-center">
+            <button class="transition ease-out my-3 mx-1 bg-blue-500 hover:bg-blue-700 active:bg-blue-900 text-white font-bold py-2 px-4 rounded">Create New</button>
+        </form>
     </div>
-    <form action="create/" class="text-center">
-        <button class="my-3 mx-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create New</button>
-    </form>
 {% endblock %}
