@@ -13,7 +13,7 @@ from accounts.models import HotelUser
 from hotel.models import Hotel
 from main.utils import getHotelUser
 
-from .models import RoomService, RoomServiceOrder
+from .models import RoomService, RoomServiceOrder, RoomServicePayment
 from .serializers import RoomServiceSerializer, RoomServiceDetailSerializer, RoomServiceOrderSerializer
 
 default_img = "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
@@ -151,18 +151,28 @@ class RoomServiceOrderView(APIView):
         time_now = datetime.now()
         time_served = request.data.get('time_served', time_now)
         notes = request.data.get('notes', "-")
+        amount = request.data.get('amount', 1)
 
         hotel_user = HotelUser.objects.get(user=user)
         room_service = RoomService.objects.get(
             pk=request.data['room_service_id'])
 
+        # create order
         order = RoomServiceOrder.objects.create(
             notes=notes,
+            amount=amount,
             time_served=time_served,
             order_date=time_now,
             room_service=room_service,
             guest=hotel_user
         )
+
+        # create invoice
+        RoomServicePayment.objects.create(
+            total_price=amount * room_service.price,
+            room_service_order=order
+        )
+
         serializer = RoomServiceOrderSerializer(order)
         return Response({'data': serializer.data})
 
@@ -179,6 +189,12 @@ class RoomServiceOrderUpdateView(APIView):
         order = RoomServiceOrder.objects.get(pk=request.data["order_id"])
         order.status = request.data["status"]
         order.save()
+
+        if (status == "REJECTED"):
+            invoice = RoomServicePayment.objects.get(room_service_order=order)
+            invoice.status = "VERIFIED"
+            invoice.save()
+
         serializer = RoomServiceOrderSerializer(order)
         return Response({'data': serializer.data})
 

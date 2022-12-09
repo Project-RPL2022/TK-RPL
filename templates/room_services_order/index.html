@@ -5,16 +5,25 @@
 {% block content %} 
 
 <div class="p-5">
-  <div id="order-wrapper" class="flex flex-col w-full gap-2"></div>
+  {% if role == 'GUEST' %}
+  <p class="text-lg font-semibold mt-2 underline">Your Order</p>
+  {% else %}
+  <p class="text-lg font-semibold mt-2 underline">Order List</p>
+  {% endif %}
+  <div id="order-wrapper" class="flex flex-col w-full gap-5 mt-5"></div>
 </div>
 <script>
   $( document ).ready(function() {
     const orderCard = (data) => {
       return `
         <a href="/roomservice/order/${data.id}">
-          <div class="flex flex-col gap-2">
-            <p>${data['room_service'].name}</p>
-            <p class="${roomServiceOrderStatusColor[data.status]}">${data.status}</div>
+          <div class="flex gap-6">
+            <img src="${data['room_service']['img_url']}" class="rounded-lg object-cover w-16 h-16 mt-1.5"/>
+            <div class="flex flex-col gap-1 justify-start">
+              <p class="font-semibold text-lg">${data['room_service'].name}</p>
+              <p class="${roomServiceOrderStatusColor[data.status]} font-semibold text-sm">${data.status}</p>
+              <p class="text-gray-700 text-xs">${getDateString(data['order_date'])}</p>
+            </div>
           </div>
         </a>
       `;

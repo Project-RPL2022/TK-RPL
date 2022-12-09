@@ -22,4 +22,5 @@ class RoomServiceOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RoomServiceOrder
-        fields = ['id', 'order_date', 'notes', 'status', 'room_service']
+        fields = ['id', 'order_date', 'notes',
+                  'status',  'amount', 'room_service']

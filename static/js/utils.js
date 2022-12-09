@@ -28,3 +28,9 @@ function getCookie(name) {
 function getPrice(price) {
   return new Intl.NumberFormat("en-DE").format(price);
 }
+
+function getDateString(date) {
+  var options = { year: 'numeric', month: 'long', day: 'numeric' };
+  let data = new Date(date);
+  return data.toLocaleDateString("en-US", options);
+}

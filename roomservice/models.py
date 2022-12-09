@@ -38,6 +38,7 @@ class RoomService(models.Model):
 
 class RoomServiceOrder(models.Model):
     order_date = models.DateTimeField()
+    amount = models.IntegerField(default=1)
     time_served = models.DateTimeField(default=datetime.now)
     notes = models.CharField(max_length=255, default="-")
     status = models.CharField(
@@ -49,7 +50,7 @@ class RoomServiceOrder(models.Model):
 
 
 class RoomServicePayment(models.Model):
-    amount = models.FloatField(default=0)
+    total_price = models.FloatField(default=0)
     status = models.CharField(
         max_length=30, choices=PAYMENT_STATUS, default="WAITING")
     room_service_order = models.OneToOneField(
