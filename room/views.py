@@ -10,6 +10,7 @@ from .forms import *
 from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.contrib.auth import *
+from django.contrib.auth.decorators import login_required
 
 def list_room(request,hotel_name):
     hotel_choose=Hotel.objects.filter(name=hotel_name)[0]
@@ -53,38 +54,44 @@ def book_room(request,hotel_name,room_name):
             form=BookRoomForm(initial=initial_data)
             return render(request,'book_room_form.html',{'form':form})
 
+@login_required
 def manage_rooms(request):
+    if get_role(request) != "HOTEL_SUPERVISOR":
+        return redirect(reverse_lazy("home"))
     if request.method != "POST":
-        if get_role(request) != "HOTEL_SUPERVISOR":
-            return redirect(reverse_lazy("home"))
-        rooms = {
-            "rooms": Room.objects.all()
+        context = {
+            "rooms": Room.objects.all(),
+            "role": get_role(request)
         }
-        return render(request, 'room/management.html', rooms)
+        return render(request, 'room/management.html', context)
 
-
+@login_required
 def create_room(request):
+    if get_role(request) != "HOTEL_SUPERVISOR":
+        return redirect(reverse_lazy("home"))
     if request.method != "POST":
         form = CreateRoomForm()
-        return render(request, 'room/create-room.html', {'form': form})
+        return render(request, 'room/create-room.html', {'form': form, "role": get_role(request)})
 
     form = CreateRoomForm(request.POST)
     if form.is_valid:
         form.save()
     return redirect(reverse_lazy("room-management"))
 
-
+@login_required
 def edit_room(request):
+    if get_role(request) != "HOTEL_SUPERVISOR":
+        return redirect(reverse_lazy("home"))
     if request.method != "POST":
         form = CreateRoomForm()
-        return render(request, 'room/create-room.html', {'form': form})
+        return render(request, 'room/create-room.html', {'form': form, "role": get_role(request)})
 
     # Display edit room
     try:
         id = request.POST['room']
         room = Room.objects.get(id=id)
         form = EditRoomForm(instance=room)
-        return render(request, 'room/edit-room.html', {'form': form, 'id': id})
+        return render(request, 'room/edit-room.html', {'form': form, 'id': id, "role": get_role(request)})
     except:
         pass
 
@@ -99,7 +106,6 @@ def edit_room(request):
         pass
 
     return redirect(reverse_lazy("room-management"))
-
 
 class CheckoutView(APIView):
     def patch(self, request, format=None):
