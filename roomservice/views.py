@@ -131,9 +131,14 @@ class RoomServiceOrderView(APIView):
         hotel_user = getHotelUser(request.user)
 
         if hotel_user.role == 'GUEST':
-            orders = RoomServiceOrder.objects.filter(guest=hotel_user)
+            orders = RoomServiceOrder.objects.filter(
+                guest=hotel_user,
+                room_service__hotel=hotel_user.guest_current_stay
+            ).order_by('-order_date')
         else:
-            orders = RoomServiceOrder.objects.all()
+            orders = RoomServiceOrder.objects.filter(
+                room_service__hotel=hotel_user.works_at
+            ).order_by('-order_date')
         serializer = RoomServiceOrderSerializer(orders, many=True)
         return Response({'data': serializer.data})
 
@@ -253,7 +258,7 @@ class RoomServiceDetailPage(APIView):
         if hotel_user.guest_status != 'CHECK-IN':
             return render(request, 'room_services/redirect.html')
 
-        return render(request, 'room_services/detail/index.html')
+        return render(request, 'room_services/detail/index.html', {'role': hotel_user.role})
 
 
 class RoomServiceOrderPage(APIView):

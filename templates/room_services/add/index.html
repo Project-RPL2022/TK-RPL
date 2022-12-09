@@ -2,41 +2,84 @@
 
 {% block title %}Add Room Services{% endblock %} 
 
-{% block content %} 
+{% block content %}
 
 <div class="p-5">
-  <p>ampun</p>
+  <div class="flex gap-2">
+    <label for="type">type</label>
+    <input
+      type="text"
+      id="type"
+      name="type"
+      value=""
+      class="border-solid border-2 border-black"
+    />
+  </div>
+  <div class="flex gap-2">
+    <label for="name">name</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      value=""
+      class="border-solid border-2 border-black"
+    />
+  </div>
+  <div class="flex gap-2">
+    <label for="img">img url</label>
+    <input
+      type="text"
+      id="img"
+      name="img"
+      value=""
+      class="border-solid border-2 border-black"
+    />
+  </div>
+  <div class="flex gap-2">
+    <label for="price">price</label>
+    <input
+      type="number"
+      id="price"
+      name="price"
+      value=""
+      class="border-solid border-2 border-black"
+    />
+  </div>
+  <button id="add-button">ADD</button>
 </div>
 <script>
-  const createService = () => {
+  const postData = () => {
     const csrf = getCookie("csrftoken");
-    const status = $("#status-select").val();
 
     $.ajax({
-      url: `/api/roomservice/order/update`,
+      url: "/api/roomservice/",
       type: "POST",
       dataType: "json",
       data: {
-        order_id: slug,
-        status: status,
+        type: $("#type").val(),
+        name: $("#name").val(),
+        img_url: $("#img").val(),
+        price: $("#price").val(),
         csrfmiddlewaretoken: csrf,
       },
       success: (data, status) => {
+        console.log("success: " + data);
         if (status == "success") {
           alert("success");
-          window.location.replace("/roomservice/order");
+          window.location.replace("/roomservice");
         } else {
-          console.log("error");
+          alert("failed");
         }
       },
       error: (error) => {
         console.log(error);
       },
     });
-  }
+  };
 
-  $("#change-status").click(() => {
-    createService();
-  })
+  $("#add-button").click(() => {
+    postData();
+  });
 </script>
+
 {% endblock %}

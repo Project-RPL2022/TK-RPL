@@ -1,6 +1,6 @@
 {% extends 'base.html' %} 
 
-{% block title %}Room Services{% endblock %} 
+{% block title %}Room Services Detail{% endblock %} 
 
 {% block content %}
 
@@ -15,9 +15,15 @@
     <p class="font-bold text-amber-500 mt-5" id="price"></p>
     <textarea id="notes" name="notes" class="border-solid border-2 border-gray-100 mt-2" rows="4" cols="50" placeholder="Notes (spicy, etc)..."></textarea>
     <div class="w-3/4 mt-3">
+      {% if role == 'GUEST' %}
       <button id="order-button" class="w-fit bg-blue-500 py-1 px-4 rounded-lg text-white">
         Order
       </button>
+      {% else %}
+      <button id="edit-button" class="w-fit bg-yellow-500 py-1 px-4 rounded-lg text-white">
+        Edit
+      </button>
+      {% endif %}
     </div>
   </div>
 </div>
@@ -54,6 +60,10 @@
       });
     }
 
+    const edit = () => {
+      window.location.replace("/roomservice/update/" + slug);
+    }
+
     const renderData = ({data, additionalData}) => {
       $("#hotel_name").text(additionalData['hotel_name']);
       $("#type").text(data['type']);
@@ -63,6 +73,9 @@
 
       $("#order-button").click(() => {
         order();
+      })
+      $("#edit-button").click(() => {
+        edit();
       })
     }
 
