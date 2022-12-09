@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from hotel.models import Hotel
 from accounts.models import HotelUser
@@ -5,6 +6,11 @@ from accounts.models import HotelUser
 ROOM_STATUS = (
     ('AVAILABLE', 'AVAILABLE'),
     ('OCCUPIED', 'OCCUPIED'),
+)
+
+ROOM_ORDER_STATUS = (
+    ('OCCUPYING', 'OCCUPYING'),
+    ('FINISHED', 'FINISHED'),
 )
 
 PAYMENT_STATUS = (
@@ -19,7 +25,7 @@ class Room(models.Model):
         return self.name
     name = models.CharField(max_length=255)
     kapasitas_max = models.IntegerField(default=1)
-    price=models.FloatField(default=500)
+    price = models.FloatField(default=500)
     tipe = models.CharField(max_length=255)
     status = models.CharField(
         max_length=30, choices=ROOM_STATUS, default="AVAILABLE")
@@ -27,8 +33,10 @@ class Room(models.Model):
 
 
 class RoomOrder(models.Model):
-    order_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    order_date = models.DateTimeField(default=datetime.now())
+    end_date = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(
+        max_length=30, choices=ROOM_ORDER_STATUS, default="OCCUPYING")
     guest = models.ForeignKey(
         HotelUser, on_delete=models.SET_NULL, null=True, blank=True)
     room = models.ForeignKey(
