@@ -22,11 +22,13 @@ PAYMENT_STATUS = (
     ('VERIFIED', 'VERIFIED'),
 )
 
+default_img = "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+
 
 class RoomService(models.Model):
     type = models.CharField(max_length=255)
     name = models.CharField(max_length=255, default="")
-    img_url = models.CharField(max_length=255, default="")
+    img_url = models.CharField(max_length=255, default=default_img)
     status = models.CharField(
         max_length=30, choices=ROOM_SERVICE_STATUS, default="AVAILABLE")
     price = models.FloatField(default=0)

@@ -1,0 +1,74 @@
+{% extends 'base.html' %} 
+
+{% block title %}Room Services{% endblock %} 
+
+{% block content %} 
+
+<div class="p-5">
+  <p>test</p>
+  <p id="status" class="font-bold"><p>
+  {% if role != 'GUEST' %}
+    <select id="status-select">
+      <option value="WAITING">WAITING</option>
+      <option value="PROCESSED">PROCESSED</option>
+      <option value="REJECTED">REJECTED</option>
+      <option value="FINISHED">FINISHED</option>
+    </select>
+    <button id="change-status">CHANGE STATUS</button>
+  {% endif %}
+</div>
+<script>
+  const slug = location.pathname.split('/').slice(1)[2];
+
+  const renderData = ({data}) => {
+    $("#status").text(data.status);
+    $("#status-select").val(data.status);
+  }
+  
+  const patchData = () => {
+    const csrf = getCookie("csrftoken");
+    const status = $("#status-select").val();
+
+    $.ajax({
+      url: `/api/roomservice/order/update`,
+      type: "POST",
+      dataType: "json",
+      data: {
+        order_id: slug,
+        status: status,
+        csrfmiddlewaretoken: csrf,
+      },
+      success: (data, status) => {
+        if (status == "success") {
+          alert("success");
+          window.location.replace("/roomservice/order");
+        } else {
+          console.log("error");
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
+  $.ajax({
+    url: `/api/roomservice/order/${slug}`,
+    type: "GET",
+    success: (data, status) => {
+      if (status == "success") {
+        renderData(data);
+      } else {
+        console.log("error");
+      }
+    },
+    error: (error) => {
+      console.log(error);
+    },
+  });
+
+  $("#change-status").click(() => {
+    patchData();
+  })
+</script>
+{% endblock %}

@@ -18,6 +18,8 @@ class RoomServiceDetailSerializer(serializers.ModelSerializer):
 
 
 class RoomServiceOrderSerializer(serializers.ModelSerializer):
+    room_service = RoomServiceSerializer(many=False)
+
     class Meta:
         model = RoomServiceOrder
-        fields = '__all__'
+        fields = ['id', 'order_date', 'notes', 'status', 'room_service']

@@ -1,0 +1,42 @@
+{% extends 'base.html' %} 
+
+{% block title %}Add Room Services{% endblock %} 
+
+{% block content %} 
+
+<div class="p-5">
+  <p>ampun</p>
+</div>
+<script>
+  const createService = () => {
+    const csrf = getCookie("csrftoken");
+    const status = $("#status-select").val();
+
+    $.ajax({
+      url: `/api/roomservice/order/update`,
+      type: "POST",
+      dataType: "json",
+      data: {
+        order_id: slug,
+        status: status,
+        csrfmiddlewaretoken: csrf,
+      },
+      success: (data, status) => {
+        if (status == "success") {
+          alert("success");
+          window.location.replace("/roomservice/order");
+        } else {
+          console.log("error");
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
+  $("#change-status").click(() => {
+    createService();
+  })
+</script>
+{% endblock %}

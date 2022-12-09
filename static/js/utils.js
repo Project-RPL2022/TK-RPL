@@ -1,3 +1,14 @@
+/* Variables */
+
+const roomServiceOrderStatusColor = {
+  WAITING: "text-orange-300",
+  PROCESSED: "text-green-500",
+  REJECTED: "text-red-500",
+  FINISHED: "text-black",
+};
+
+/* Functions */
+
 function getCookie(name) {
   var cookieValue = null;
   if (document.cookie && document.cookie != "") {

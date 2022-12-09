@@ -3,8 +3,17 @@
 {% block title %}Room Services{% endblock %} 
 
 {% block content %} 
+
 <div class="p-5">
-  <p class="text-lg font-semibold">Room Services <span id="hotel-name"></span></p>
+  <p class="text-lg font-semibold mt-2">Room Services <span id="hotel-name"></span></p>
+  {% if role == 'GUEST' %}
+  <button id="my-order" class="py-2 px-5 bg-blue-500 text-white font-semibold rounded-lg">See My Order</button>
+  {% else %}
+  <div class="flex gap-2 mt-2">
+    <button id="all-order" class="py-2 px-5 bg-green-500 text-white font-semibold rounded-lg">See All Order</button>
+    <button id="add-service" class="py-2 px-5 bg-blue-500 text-white font-semibold rounded-lg">Add More Service</button>
+  </div>
+  {% endif %}
   <div id="services-wrapper" class="mt-5 flex flex-wrap gap-x-5 gap-y-4"></div>
 </div>
 <script>
@@ -46,6 +55,16 @@
       error: (error) => {
         console.log(error);
       },
+    });
+
+    $("#my-order").click(() => {
+      window.location.replace("/roomservice/order");
+    });
+    $("#all-order").click(() => {
+      window.location.replace("/roomservice/order");
+    });
+    $("#add-service").click(() => {
+      window.location.replace("/roomservice/add");
     });
   });
 </script>
