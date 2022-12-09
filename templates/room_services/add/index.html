@@ -5,47 +5,54 @@
 {% block content %}
 
 <div class="p-5">
-  <div class="flex gap-2">
-    <label for="type">type</label>
-    <input
-      type="text"
-      id="type"
-      name="type"
-      value=""
-      class="border-solid border-2 border-black"
-    />
+  <p id="title" class="text-lg font-semibold mt-2">Add a Service</p>
+  <div class="flex flex-col gap-1">
+    <div class="flex gap-2 mt-10 items-center">
+      <label for="type" class="w-24 font-semibold text-gray-800">Type:</label>
+      <input
+        type="text"
+        id="type"
+        name="type"
+        value=""
+        class="px-2 py-1 rounded-lg"
+        style="border: 1px solid rgb(55 65 81);"
+      />
+    </div>
+    <div class="flex gap-2 mt-5 items-center">
+      <label for="name" class="w-24 font-semibold text-gray-800">Name:</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value=""
+        class="px-2 py-1 rounded-lg"
+        style="border: 1px solid rgb(55 65 81);"
+      />
+    </div>
+    <div class="flex gap-2 mt-5 items-center">
+      <label for="img" class="w-24 font-semibold text-gray-800">Image URL: </label>
+      <input
+        type="text"
+        id="img"
+        name="img"
+        value=""
+        class="px-2 py-1 rounded-lg"
+        style="border: 1px solid rgb(55 65 81);"
+      />
+    </div>
+    <div class="flex gap-2 mt-5 items-center">
+      <label for="price" class="w-24 font-semibold text-gray-800">Price:</label>
+      <input
+        type="number"
+        id="price"
+        name="price"
+        value=""
+        class="px-2 py-1 rounded-lg"
+        style="border: 1px solid rgb(55 65 81);"
+      />
+    </div>
   </div>
-  <div class="flex gap-2">
-    <label for="name">name</label>
-    <input
-      type="text"
-      id="name"
-      name="name"
-      value=""
-      class="border-solid border-2 border-black"
-    />
-  </div>
-  <div class="flex gap-2">
-    <label for="img">img url</label>
-    <input
-      type="text"
-      id="img"
-      name="img"
-      value=""
-      class="border-solid border-2 border-black"
-    />
-  </div>
-  <div class="flex gap-2">
-    <label for="price">price</label>
-    <input
-      type="number"
-      id="price"
-      name="price"
-      value=""
-      class="border-solid border-2 border-black"
-    />
-  </div>
-  <button id="add-button">ADD</button>
+  <button id="add-button" class="mt-10 bg-blue-500 py-2 px-4 text-white text-xl font-semibold rounded-lg">ADD</button>
 </div>
 <script>
   const postData = () => {
@@ -65,10 +72,16 @@
       success: (data, status) => {
         console.log("success: " + data);
         if (status == "success") {
-          alert("success");
-          window.location.replace("/roomservice");
+          tata.success('Success', 'Service added.', {
+            duration: 3000
+          });
+          setTimeout(() => {
+            window.location.replace("/roomservice");
+          }, 1000);
         } else {
-          alert("failed");
+          tata.error('Failed', 'Failed adding service.', {
+            duration: 3000
+          });
         }
       },
       error: (error) => {

@@ -48,10 +48,17 @@
         success: (data, status) => {
           console.log("success: " + data);
           if (status == "success") {
-            alert("success");
-            window.location.replace("/roomservice");
+            tata.success('Success', 'Order created.', {
+              duration: 3000
+            });
+            setTimeout(() => {
+              window.location.replace("/roomservice");
+            }, 1000);
           } else {
             alert("failed");
+            tata.error('Failed', 'Failed creating order.', {
+              duration: 3000
+            });
           }
         },
         error: (error) => {

@@ -18,9 +18,9 @@
 </div>
 <script>
   $( document ).ready(function() {
-    const serviceCard = (data) => {
+    const serviceCard = (data, additionalData) => {
       return `
-        <a ${data.status == "AVAILABLE" && `href="${data.id}"`}>
+        <a ${(data.status == "AVAILABLE" || additionalData.role != "GUEST") && `href="${data.id}"`}>
           <div class="flex flex-col gap-2 relative ${data.status != "AVAILABLE" && "grayscale"}">
             <img
               class="w-48 h-48 object-cover rounded-lg" 
@@ -38,7 +38,7 @@
     const renderServices = ({data, additionalData}) => {
       $("#hotel-name").append(additionalData.hotel_name);
       for (i=0; i<data.length; i++) {
-        $("#services-wrapper").append(serviceCard(data[i]));
+        $("#services-wrapper").append(serviceCard(data[i], additionalData));
       }
     }
 

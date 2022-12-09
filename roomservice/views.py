@@ -68,7 +68,10 @@ class RoomServiceView(APIView):
         hotel = hotel_user.guest_current_stay
         additionalData = {}
         if hotel != None:
-            additionalData = {'hotel_name': hotel.name}
+            additionalData = {
+                'hotel_name': hotel.name,
+                'role': role
+            }
         else:
             raise PermissionDenied(
                 {"error_message": "You don't have permission to access"})
@@ -104,6 +107,7 @@ class RoomServiceUpdateView(APIView):
         room.name = request.data["name"]
         room.img_url = request.data["img_url"]
         room.price = request.data["price"]
+        room.status = request.data["status"]
         room.save()
         serializer = RoomServiceSerializer(room)
         return Response({'data': serializer.data})
