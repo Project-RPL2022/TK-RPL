@@ -1,0 +1,54 @@
+{% extends 'base.html' %} 
+
+{% block title %}Payment List{% endblock %} 
+
+{% block content %} 
+<div>
+<p><b>Room Payment</b></p>
+<table style='font-family: arial, sans-serif; border-collapse: collapse; width: 100%;'>
+    <tr>
+    <th>No</th>  
+    <th>Room</th>
+    <th>Price</th>
+    <th>Status</th>
+    <th>Pay</th>
+    {% for room in rooms %}
+    <tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ room.room_order.room }}</td>
+    <td>{{ room.price }}</td>
+    <td>{{ room.status }}</td>
+    <td>
+    {% if room.status == "WAITING" %}
+        <a href="/payment/room_order/detail/{{ room.pk }}"><button style="border: none; color: red; padding: 12px 28px; text-align: center; text-decoration: none; display: inline-block; font-size: 20px; margin: 2px 1px; transition-duration: 0.4s; cursor: pointer;">Pay</button></a>
+    {% endif %}
+    </td>
+    </tr>
+    {% endfor %}
+</tr>
+</table>
+<p><b>Room Service Payment</b></p>
+<table style='font-family: arial, sans-serif; border-collapse: collapse; width: 100%;'>
+    <tr>
+    <th>No</th>  
+    <th>Service</th>  
+    <th>Total Price</th>
+    <th>Status</th>
+    <th>Pay</th>
+    {% for room_service in room_services %}
+    <tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ room_service.room_service_order.room_service.name }}</td>
+    <td>{{ room_service.total_price }}</td>
+    <td>{{ room_service.status }}</td>
+    <td>
+    {% if room_service.status == "WAITING" %}
+        <a href="/payment/room_service_order/detail/{{ room_service.pk }}"><button style="border: none; color: red; padding: 12px 28px; text-align: center; text-decoration: none; display: inline-block; font-size: 20px; margin: 2px 1px; transition-duration: 0.4s; cursor: pointer;">Pay</button></a>
+    {% endif %}
+    </td>
+    </tr>
+    {% endfor %}
+</tr>
+</table>
+</div>
+{% endblock %}

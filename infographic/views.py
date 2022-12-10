@@ -13,6 +13,9 @@ from django.core.files.base import ContentFile
 from io import BytesIO
 
 # Create your views here.
+@csrf_exempt
+def show_infographic(request, hotelId):
+    return render(request, 'infographic/index.html')
 
 @csrf_exempt
 def getInfographic(request, hotelId):
@@ -39,7 +42,7 @@ def getInfographic(request, hotelId):
         canvas = generateImage(hotelObject, facilityObjects)
         blob = BytesIO()
         canvas.save(blob, format='PNG')
-        img_content = ContentFile(blob.getvalue(), 'infographic_'+hotelId+'.png')
+        img_content = ContentFile(blob.getvalue(), 'infographic_'+str(hotelId)+'.png')
         newInfographic = Infographic(name='Infographic ' + hotelObject.name, hotel=hotelObject, image=img_content)
         newInfographic.save()
         return JsonResponse({

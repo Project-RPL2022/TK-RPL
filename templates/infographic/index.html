@@ -1,0 +1,39 @@
+{% extends 'base.html' %} 
+
+{% block title %}Guest List{% endblock %} 
+
+{% block content %} 
+
+<div class="p-5">
+  <p class="text-lg font-semibold mt-2">Infographic</p>
+  <div>
+    <img id="infographic" alt="Not available yet!">
+  </div>
+</div>
+<script>
+  $( document ).ready(function() {
+    const hotelId = location.pathname.split('/').slice(2)[1];
+    const renderGuest = (data) => {
+      const infographicUrl = data.infographicUrl;
+      $("#infographic").attr("src", infographicUrl);
+    }
+
+    $.ajax({
+      url: "/infographic/"+hotelId,
+      type: "GET",
+      success: (data) => {
+        if (data.success) {
+          console.log(data)
+          renderGuest(data);
+        } else {
+          console.log("error");
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  });
+</script>
+
+{% endblock %}

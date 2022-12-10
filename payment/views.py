@@ -43,6 +43,53 @@ def user_is_admin(request):
             "success": True
         }
 
+def payment_list(request):
+    is_guest = user_is_guest(request)
+    if not is_guest.get("success"):
+        return JsonResponse(is_guest)
+
+    # Check if room service order and room service payment available and is associated with this user
+    hotel_user = getHotelUser(request.user)
+
+    room_order_list = RoomOrder.objects.filter(guest=hotel_user)
+    room_payment_list = RoomPayment.objects.filter(room_order__in=room_order_list)
+
+    room_service_order_list = RoomServiceOrder.objects.filter(guest=hotel_user)
+    room_service_payment_list = RoomServicePayment.objects.filter(room_service_order__in=room_service_order_list)
+    response = {"rooms": room_payment_list, "room_services": room_service_payment_list}
+    return render(request, 'payment/payment.html', response)
+
+def get_room_payment_detail(request, room_payment_id):
+    return render(request, 'payment/room_payment/detail/index.html')
+
+def get_room_payment_detail_api(request, room_payment_id):
+    is_guest = user_is_guest(request)
+    if not is_guest.get("success"):
+        return JsonResponse(is_guest)
+    # Check if room order and room payment available and is associated with this user
+    hotel_user = getHotelUser(request.user)
+    try:
+        room_payment = RoomPayment.objects.get(pk=room_payment_id)
+    except RoomPayment.DoesNotExist:
+        return JsonResponse({
+            "success": False,
+            "message": "RoomPayment with id " + str(room_payment_id) + " does not exist",
+            })
+    room_order = room_payment.room_order
+    room = room_order.room
+    if hotel_user != room_order.guest:
+        return JsonResponse({
+            "success": False,
+            "message": "User is not associated with this payment",
+            })
+    return JsonResponse({
+        "success": True,
+        "message": "OK",
+        "room": room.name,
+        "price": room_payment.price,
+        "status": room_payment.status,
+    })
+
 @login_required
 def pay_room_payment(request, room_payment_id):
     # Check if user is guest
@@ -85,6 +132,37 @@ def pay_room_payment(request, room_payment_id):
         room_payment.save()
     return JsonResponse(r_dict)
 
+def get_room_service_payment_detail(request, room_service_payment_id):
+    return render(request, 'payment/room_service_payment/detail/index.html')
+
+def get_room_service_payment_detail_api(request, room_service_payment_id):
+    # Check if user is guest
+    is_guest = user_is_guest(request)
+    if not is_guest.get("success"):
+        return JsonResponse(is_guest)
+    # Check if room service order and room service payment available and is associated with this user
+    hotel_user = getHotelUser(request.user)
+    try:
+        room_service_payment = RoomServicePayment.objects.get(pk=room_service_payment_id)
+    except RoomServicePayment.DoesNotExist:
+        return JsonResponse({
+            "success": False,
+            "message": "RoomServicePayment with id " + str(room_service_payment_id) + " does not exist",
+            })
+    room_service_order = room_service_payment.room_service_order
+    room_service = room_service_order.room_service
+    if hotel_user != room_service_order.guest:
+        return JsonResponse({
+            "success": False,
+            "message": "User is not associated with this payment",
+            })
+    return JsonResponse({
+        "success": True,
+        "message": "OK",
+        "service": room_service.name,
+        "price": room_service_payment.total_price,
+        "status": room_service_payment.status,
+    })
 
 @login_required
 def pay_room_service_payment(request, room_service_payment_id):
@@ -114,7 +192,7 @@ def pay_room_service_payment(request, room_service_payment_id):
             })
     
     # Connect to payment service, and paying according to price amount
-    payload = {'price': room_service_payment.amount}
+    payload = {'price': room_service_payment.total_price}
     try:
         r = requests.post('https://dummy-wallet-api.fly.dev/pay', data=payload)
     except ConnectionError as e:

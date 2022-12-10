@@ -5,16 +5,17 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def generateImage(hotel, facilities):
-    canvasUrl = static('hotel-background.png')
+    imgUrl = static('hotel-background.png')
     canvas = Image.open(imgUrl)
 
     # Local testing
     # canvas = Image.open('E:\\RPL\\TK-RPL\static\hotel-background.png')
 
     # Font preferences
-    titleFont = ImageFont.truetype('arial.ttf', 45)
-    subtitleFont = ImageFont.truetype('arial.ttf', 30)
-    descriptionFont = ImageFont.truetype('arial.ttf', 20)
+    fontUsed = static('arial.ttf')
+    titleFont = ImageFont.truetype(fontUsed, 45)
+    subtitleFont = ImageFont.truetype(fontUsed, 30)
+    descriptionFont = ImageFont.truetype(fontUsed, 20)
     fontColor = (100, 41, 2)
 
     width, height = canvas.size
