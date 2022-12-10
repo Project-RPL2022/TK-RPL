@@ -129,6 +129,7 @@ def pay_room_service_payment(request, room_service_payment_id):
     return JsonResponse(r_dict)
 
 
+@login_required
 def get_payment_info(request):
     if request.method != "POST":
         is_admin = user_is_admin(request)
