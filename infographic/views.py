@@ -13,6 +13,9 @@ from django.core.files.base import ContentFile
 from io import BytesIO
 
 # Create your views here.
+@csrf_exempt
+def show_infographic(request, hotelId):
+    return render(request, 'infographic/index.html')
 
 @csrf_exempt
 def getInfographic(request, hotelId):
