@@ -17,9 +17,7 @@
       <tr>
         <td>{{  forloop.counter }}</td>
         <td>{{  hotel.name }}</td>
-        <td><a href="/room/book_room{{ hotel.name }}">Book Hotel</a>
-          <a href="/room/create_room/{{ hotel.name }}">Build Room</a>
-          <a href="/room/list_room/{{ hotel.name }}">List Room</a>
+        <td><a href="/room/list_room/{{ hotel.name }}">List Room</a>
         </td>
       </tr>
       {% endfor %}
