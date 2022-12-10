@@ -3,9 +3,33 @@
     <meta charset="utf-8" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.cdnfonts.com/css/google-sans" rel="stylesheet">
+    {% load static %}
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/tata.min.js' %}"></script>
     <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
-    <main>{% block content %} {% endblock %}</main>
+    <style>
+      .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 36px;  /* Preferred icon size */
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+        color: white;
+      }
+    </style>
+    <main class="flex bg-neutral-50">
+      {% include "components/sidebar.html" %}
+      {% block content %} {% endblock %}
+    </main>
   </body>
 </html>

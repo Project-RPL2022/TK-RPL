@@ -3,17 +3,19 @@
 {% block title %}Create Room{% endblock %}
 
 {% block content %}
-  <div class="translate-y-1/2 mx-auto w-[28rem] border-2 shadow-lg text-center rounded-xl bg-blue-50">
-    <h2 class="p-3 bg-blue-500 font-bold rounded-t-xl">Create Room</h2>
-    <form method="post" class="p-4 text-center">
-      {% csrf_token %}
-      {% for field in form %}
-      <div class="p-3 grid grid-cols-3 gap-2">
-        {{ field.label_tag }}
-        {{ field|add_class:"col-span-2 border-black border rounded" }}
-      </div>  
-      {% endfor %}
-      <button type="submit" class="my-3 mx-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
-    </form>
+  <div class="w-screen h-screen p-10 flex">
+    <div class="m-auto w-[28rem] border-2 shadow-lg text-center rounded-xl bg-blue-50">
+      <h2 class="p-3 bg-blue-500 font-bold rounded-t-xl">Create Room</h2>
+      <form method="post" class="p-4 text-center">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="p-3 grid grid-cols-3 gap-2">
+          {{ field.label_tag }}
+          {{ field|add_class:"col-span-2 border-black border rounded" }}
+        </div>
+        {% endfor %}
+        <button type="submit" class="active:scale-90 transition ease-out my-3 mx-1 bg-blue-500 hover:bg-blue-700 active:bg-blue-900 text-white font-bold py-2 px-4 rounded">Submit</button>
+      </form>
+    </div>
   </div>
 {% endblock %}
