@@ -18,6 +18,12 @@
       <span class="material-symbols-outlined">room_service</span>
       <p class="text-lg text-white">Services</p>
     </a>
+    {% if role == "GUEST" %}
+    <a id="navbar-payment-link" class="focus:scale-90 transition ease-in-out duration-150 delay-100 flex gap-5 items-center bg-red-500 hover:bg-red-700 py-2 px-5 rounded-lg" href="/payment">
+      <span class="material-symbols-outlined">payment</span>
+      <p class="text-lg text-white">Payment</p>
+    </a>
+    {% endif %}
     {% if role != "GUEST" %}
     <a id="navbar-checkout-link" class="focus:scale-90 transition ease-in-out duration-150 delay-100 flex gap-5 items-center bg-red-500 hover:bg-red-700 py-2 px-5 rounded-lg" href="/room/checkout">
       <span class="material-symbols-outlined">luggage</span>
@@ -63,6 +69,7 @@
     else if (pathname.includes("checkout")) linkId = 'navbar-checkout-link';
     else if (pathname.includes("roomservice")) linkId = 'navbar-service-link';
     else if (pathname.includes("/room/")) linkId = 'navbar-room-link';
+    else if (pathname.includes("payment")) linkId = 'navbar-payment-link';
     
     $('#' + linkId).addClass("bg-red-700");
     $('#' + linkId).removeClass("bg-red-500");
