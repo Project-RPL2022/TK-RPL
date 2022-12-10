@@ -1,0 +1,94 @@
+{% extends 'base.html' %} 
+
+{% block title %}Guest Detail{% endblock %} 
+
+{% block content %} 
+
+<div class="p-5">
+  <p class="text-lg font-semibold mt-2 underline">Guest Detail</p>
+  <div class="mt-3 flex flex-col gap-2">
+    <div class="flex gap-2 mt-5 items-center">
+      <p class="w-24 font-semibold text-gray-800">Name:</p>
+      <p id="name"></p>
+    </div>
+    <div class="flex gap-2 mt-5 items-center">
+      <p class="w-24 font-semibold text-gray-800">Email:</p>
+      <p id="email"></p>
+    </div>
+    <div class="flex gap-2 mt-5 items-center">
+      <p class="w-24 font-semibold text-gray-800">Status:</p>
+      <p id="status" class="text-blue-500 font-semibold"></p>
+    </div>
+    <button id="checkout-button" class="w-fit bg-blue-500 py-1 px-4 rounded-lg text-white mt-5">
+      CHECK OUT
+    </button>
+  </div>
+</div>
+<script>
+  $( document ).ready(function() {
+    const slug = location.pathname.split('/').slice(3)[1];
+
+    const doCheckout = () => {
+      const csrf = getCookie("csrftoken");
+      
+      $.ajax({
+        url: `/room/api/checkout/`,
+        type: "POST",
+        dataType: "json",
+        data: {
+          username: slug,
+          csrfmiddlewaretoken: csrf,
+        },
+        success: (data, status) => {
+          if (status == "success") {
+            tata.success('Success', 'Guest has been checked out.', {
+              duration: 3000
+            });
+            setTimeout(() => {
+              window.location.replace("/room/checkout");
+            }, 1000);
+          } else {
+            tata.error('Failed', 'Failed checking out.', {
+              duration: 3000
+            });
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+    }
+
+    const renderGuest = ({data}) => {
+      const status = data['guest_status'];
+      const fullname = `${data['user']['first_name']} ${data['user']['last_name']}`;
+      const username = data.user.username;
+      const email = data.user.email;
+
+      $("#name").text(`${fullname.length == 1 ? username : fullname}`);
+      $("#email").text(`${email.length == 0 ? '-' : email}`);
+      $("#status").text(status);
+      
+      $("#checkout-button").click(() => {
+        doCheckout();
+      });
+    }
+
+    $.ajax({
+      url: "/room/api/checkout/detail/" + slug,
+      type: "GET",
+      success: (data, status) => {
+        if (status == "success") {
+          console.log(data)
+          renderGuest(data);
+        } else {
+          console.log("error");
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  });
+</script>
+{% endblock %}

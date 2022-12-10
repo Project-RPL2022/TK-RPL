@@ -1,0 +1,55 @@
+{% extends 'base.html' %} 
+
+{% block title %}Guest List{% endblock %} 
+
+{% block content %} 
+
+<div class="p-5">
+  <p class="text-lg font-semibold mt-2">All Guest</p>
+  <div id="guests-wrapper" class="mt-5 flex flex-wrap gap-x-5 gap-y-4"></div>
+</div>
+<script>
+  $( document ).ready(function() {
+    const guestCard = (data) => {
+      const status = data['guest_status'];
+      const fullname = `${data['user']['first_name']} ${data['user']['last_name']}`;
+      const username = data.user.username;
+
+      return `
+        <a ${status == "CHECK-IN" && `href="/room/checkout/detail/${data.user.username}"`}>
+          <div 
+            class="${status == "CHECK-OUT" && "grayscale"} flex flex-col gap-2 relative p-2 rounded-lg shadow-md"
+            style="border: 0.5px solid rgb(107 114 128);"
+          >
+            <p class="font-bold">${fullname.length == 1 ? username : fullname}</p>
+            <p class="font-bold text-blue-500">${data['guest_status']}</p>
+          </div>
+        </a>
+      `
+    }
+
+    const renderGuest = ({data}) => {
+      for (i=0; i<data.length; i++) {
+        $("#guests-wrapper").append(guestCard(data[i]));
+      }
+    }
+
+    $.ajax({
+      url: "/room/api/checkout/",
+      type: "GET",
+      success: (data, status) => {
+        if (status == "success") {
+          console.log(data)
+          renderGuest(data);
+        } else {
+          console.log("error");
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  });
+</script>
+
+{% endblock %}

@@ -1,9 +1,72 @@
 {% extends 'base.html' %} 
 
-{% block title %}Create Room{% endblock %} 
+{% block title %}Room Services{% endblock %} 
 
-{%blockcontent %} 
-<div>
+{% block content %} 
+
+<div class="p-5">
+  <p class="text-lg font-semibold mt-2">Room Services <span id="hotel-name"></span></p>
+  {% if role == 'GUEST' %}
+  <button id="my-order" class="py-2 px-5 bg-blue-500 text-white font-semibold rounded-lg">See My Order</button>
+  {% else %}
+  <div class="flex gap-2 mt-2">
+    <button id="all-order" class="py-2 px-5 bg-green-500 text-white font-semibold rounded-lg">See All Order</button>
+    <button id="add-service" class="py-2 px-5 bg-blue-500 text-white font-semibold rounded-lg">Add More Service</button>
+  </div>
+  {% endif %}
+  <div id="services-wrapper" class="mt-5 flex flex-wrap gap-x-5 gap-y-4"></div>
 </div>
+<script>
+  $( document ).ready(function() {
+    const serviceCard = (data, additionalData) => {
+      return `
+        <a ${(data.status == "AVAILABLE" || additionalData.role != "GUEST") && `href="${data.id}"`}>
+          <div class="flex flex-col gap-2 relative ${data.status != "AVAILABLE" && "grayscale"}">
+            <img
+              class="w-48 h-48 object-cover rounded-lg" 
+              src="${data.img_url}" alt="Service Img" />
+            <div class="absolute left-0 top-0 text-white bg-red-300 rounded-tl-lg p-1 text-xs">${data.type}</div>
+            <div class="flex flex-col">
+              <p class="font-bold">${data.name}</p>
+              <p class="font-bold text-amber-500">Rp ${getPrice(data.price)}</p>
+            </div>
+          </div>
+        </a>
+      `
+    }
+
+    const renderServices = ({data, additionalData}) => {
+      $("#hotel-name").append(additionalData.hotel_name);
+      for (i=0; i<data.length; i++) {
+        $("#services-wrapper").append(serviceCard(data[i], additionalData));
+      }
+    }
+
+    $.ajax({
+      url: "/api/roomservice",
+      type: "GET",
+      success: (data, status) => {
+        if (status == "success") {
+          renderServices(data);
+        } else {
+          console.log("error");
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+
+    $("#my-order").click(() => {
+      window.location.replace("/roomservice/order");
+    });
+    $("#all-order").click(() => {
+      window.location.replace("/roomservice/order");
+    });
+    $("#add-service").click(() => {
+      window.location.replace("/roomservice/add");
+    });
+  });
+</script>
 
 {% endblock %}
