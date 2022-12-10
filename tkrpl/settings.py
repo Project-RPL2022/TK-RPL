@@ -31,8 +31,6 @@ SECRET_KEY = 'django-insecure-x!*hzn##xivhhoa(rz*@up%k3b8sjc73vynws^a$9_f^_zjnpw
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = not PRODUCTION
-# Turn on for deploy debugging
-DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -171,7 +169,8 @@ LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
 # File storage
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+if PRODUCTION:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # AWS S3 configuration
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')

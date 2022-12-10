@@ -23,7 +23,7 @@ class HotelUser(models.Model):
     address = models.CharField(max_length=255, null=True, blank=True)
     guest_status = models.CharField(
         max_length=30, choices=GUEST_STATUS, default='CHECK-OUT')
-    guest_current_stay = models.OneToOneField(
+    guest_current_stay = models.ForeignKey(
         Hotel, on_delete=models.SET_NULL, null=True, blank=True, related_name="hotel_stay")
     works_at = models.ForeignKey(
         Hotel, on_delete=models.SET_NULL, null=True, blank=True, related_name="hotel_work")

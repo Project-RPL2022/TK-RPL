@@ -3,7 +3,7 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-  <div class="translate-y-1/2 mx-auto w-96 border-2 shadow-lg text-center rounded-xl bg-blue-50">
+  <div class="mx-auto my-auto w-96 border-2 shadow-lg text-center rounded-xl bg-blue-50">
     <h2 class="p-3 bg-blue-500 font-bold rounded-t-xl">Sign Up</h2>
     <form method="post" class="p-1 text-center">
       {% csrf_token %}
@@ -32,6 +32,5 @@
       <p class="text-red-600">{{ message }}</p>
       <button type="submit" class="p-2 bg-blue-400 rounded">Sign Up</button>
     </form>
-    <p class="pb-4">Already have an account? <a href={% url "login" %} class="underline text-blue-600">Login</a></p>
   </div>
 {% endblock %}

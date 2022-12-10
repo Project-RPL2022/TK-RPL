@@ -1,0 +1,116 @@
+{% extends 'base.html' %} 
+
+{% block title %}Order Detail{% endblock %} 
+
+{% block content %} 
+
+<div class="p-5">
+  <p id="title" class="underline text-gray-700 text-xl"></p>
+  <p id="status-title" class="font-bold"><p>
+  <div class="flex flex-col gap-1">
+    <div class="flex gap-2 mt-5 items-center">
+      <p class="w-24 font-semibold text-gray-800">Date:</p>
+      <p id="date"></p>
+    </div>
+    <div class="flex gap-2 mt-5 items-center">
+      <p class="w-24 font-semibold text-gray-800">Type:</p>
+      <p id="type"></p>
+    </div>
+    <div class="flex gap-2 mt-5 items-center">
+      <p class="w-24 font-semibold text-gray-800">Name:</p>
+      <p id="name"></p>
+    </div>
+    <div class="flex gap-2 mt-5 items-center">
+      <p class="w-24 font-semibold text-gray-800">Amount:</p>
+      <p id="amount"></p>
+    </div>
+    <div class="flex gap-2 mt-5">
+      <p class="w-24 font-semibold text-gray-800">Notes:</p>
+      <textarea id="notes" name="notes" class="border-solid border-2 border-gray-100" rows="4" cols="50" disabled></textarea>
+    </div>
+  </div>
+  {% if role != 'GUEST' %}
+    <div class="flex gap-2 mt-5">
+      <p class="w-24 font-semibold text-gray-800">Status:</p>
+      <div>
+        <input type="radio" id="waiting" name="status" value="WAITING">
+        <label for="waiting" class="text-orange-300">WAITING</label><br>
+        <input type="radio" id="processed" name="status" value="PROCESSED">
+        <label for="processed" class="text-green-500">PROCESSED</label><br>
+        <input type="radio" id="rejected" name="status" value="REJECTED">
+        <label for="rejected" class="text-red-500">REJECTED</label><br>
+        <input type="radio" id="finished" name="status" value="FINISHED">
+        <label for="finished" class="text-black">FINISHED</label><br>
+      </div>
+    </div>
+    <button id="change-status" class="mt-10 bg-green-500 py-2 px-4 text-white text-lg font-semibold rounded-lg">CHANGE STATUS</button>
+  {% endif %}
+</div>
+<script>
+  const slug = location.pathname.split('/').slice(1)[2];
+
+  const renderData = ({data}) => {
+    $("#title").text(`Order ${data.id}`);
+    $("#status-title").text(data.status);
+    $("#status-title").addClass(roomServiceOrderStatusColor[data.status]);
+    $("#date").text(getDateString(data['order_date']));
+    $("#type").text(data['room_service']['type']);
+    $("#name").text(data['room_service']['name']);
+    $("#amount").text(data['amount']);
+    $("#notes").val(data['notes']);
+    $('#' + data["status"].toLowerCase()).prop("checked", true);
+  }
+  
+  const patchData = () => {
+    const csrf = getCookie("csrftoken");
+    const status = $("#status-select").val();
+
+    $.ajax({
+      url: `/api/roomservice/order/update`,
+      type: "POST",
+      dataType: "json",
+      data: {
+        order_id: slug,
+        status: $('input[name="status"]:checked').val(),
+        csrfmiddlewaretoken: csrf,
+      },
+      success: (data, status) => {
+        if (status == "success") {
+          tata.success('Success', 'Order status updated.', {
+            duration: 3000
+          });
+          setTimeout(() => {
+            window.location.replace("/roomservice/order");
+          }, 1000);
+        } else {
+          tata.error('Failed', 'Failed updating status.', {
+            duration: 3000
+          });
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
+  $.ajax({
+    url: `/api/roomservice/order/${slug}`,
+    type: "GET",
+    success: (data, status) => {
+      if (status == "success") {
+        renderData(data);
+      } else {
+        console.log("error");
+      }
+    },
+    error: (error) => {
+      console.log(error);
+    },
+  });
+
+  $("#change-status").click(() => {
+    patchData();
+  })
+</script>
+{% endblock %}

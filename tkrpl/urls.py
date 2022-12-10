@@ -22,10 +22,9 @@ import room.urls as room
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('room/', include('room.urls')),
     path('hotel/', include('hotel.urls')),
-    path('roomservice/', include('roomservice.urls')),
+    path('', include('roomservice.urls')),
     path('infographic/', include('infographic.urls')),
     path('payment/', include('payment.urls')),
     path('', include('feedback.urls')),
