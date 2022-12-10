@@ -39,7 +39,7 @@ def getInfographic(request, hotelId):
         canvas = generateImage(hotelObject, facilityObjects)
         blob = BytesIO()
         canvas.save(blob, format='PNG')
-        img_content = ContentFile(blob.getvalue(), 'infographic_'+hotelId+'.png')
+        img_content = ContentFile(blob.getvalue(), 'infographic_'+str(hotelId)+'.png')
         newInfographic = Infographic(name='Infographic ' + hotelObject.name, hotel=hotelObject, image=img_content)
         newInfographic.save()
         return JsonResponse({
